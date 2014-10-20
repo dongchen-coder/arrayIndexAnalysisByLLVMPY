@@ -1,4 +1,4 @@
-List for Python
+Tutorial for Python List
 ===============
 
 Dong Chen
@@ -6,11 +6,30 @@ Dong Chen
 Introduction
 ------------
 
-Hello
+hello
 
-this is my code 
 
-‘’’
-    for () {
-    }
-‘’’
+Code Sample
+------------
+
+Python Code
+	hello
+
+Assemble Code
+        __hello
+
+
+Execution 
+------------
+
+```
+function test() {
+  console.log("notice the blank line before this function?");
+}
+```
+
+
+
+
+
+
