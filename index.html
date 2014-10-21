@@ -130,9 +130,7 @@ A Python list is an</title>
 the items in the list will be like, the other is how to get them.</p>
 
 <pre><code>list = [ x+y for x in ‘one’ for y in ’two’]
-
 &gt;&gt;&gt; list
-
 &gt;&gt;&gt; [‘ot’,’ow’,’oo’,’nt’,’nw’,’no’,’et’,’ew’,’eo’]
 </code></pre>
 
@@ -141,6 +139,11 @@ the items in the list will be like, the other is how to get them.</p>
 <pre><code>list = [1, 2, 3, 4]
 for item in list:
     print (item)
+
+&gt;&gt;&gt;1
+2
+3
+4
 </code></pre>
 
 <h2>Code Sample</h2>
@@ -152,7 +155,13 @@ for item in list:
     print (item)
 </code></pre>
 
-<p><b>Assemble Code:</b></p>
+<p><b>Assemble Code:</b> <br/>
+Then we can compile Python code by comand line:</p>
+
+<pre><code>python -m dis filename.py
+</code></pre>
+
+<p>The resulting assemble code is listed below:</p>
 
 <pre><code>1         0 LOAD_CONST               0 (1)
           3 LOAD_CONST               1 (2)
@@ -177,6 +186,11 @@ for item in list:
 </code></pre>
 
 <h2>Execution </h2>
+
+<p>The execution process of iterating the list can be visualized on <a http://pythontutor.com/">Python Tutorial</a></p>
+
+<p><img src="./1.png" title="Optional title" alt="Alt text" />
+<img src="./2.png" title="Optional title" alt="Alt text" /></p>
 
 <p><b>SETUP_LOOP</b></p>
 

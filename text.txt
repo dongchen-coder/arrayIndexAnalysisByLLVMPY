@@ -17,7 +17,7 @@ A Python list is an ordered sequence of items which don’t have to be of the sa
 
 The plain way to create a Python list is just by statically writing the items between square brackets.
 
-
+ 
 	list ＝ ［ 1，‘a’， “hello”， sublist， Student(“Dong”) ］
 
 
@@ -25,9 +25,7 @@ List can also be created by list comprehensions. List comprehension is a descrip
 the items in the list will be like, the other is how to get them.
 
 	list = [ x+y for x in ‘one’ for y in ’two’]
-
 	>>> list
-
 	>>> [‘ot’,’ow’,’oo’,’nt’,’nw’,’no’,’et’,’ew’,’eo’]
 
 <b>Iterating over a Python list:</b>
@@ -36,6 +34,12 @@ the items in the list will be like, the other is how to get them.
 	list = [1, 2, 3, 4]
 	for item in list:
   		print (item)
+  	
+  	>>>1
+  	2
+  	3
+  	4
+  	
 
 
 
@@ -49,6 +53,11 @@ Code Sample
   		print (item)
 
 <b>Assemble Code:</b>   
+Then we can compile Python code by comand line:
+	
+	python -m dis filename.py
+
+The resulting assemble code is listed below:
 
   	1         0 LOAD_CONST               0 (1)
               3 LOAD_CONST               1 (2)
@@ -73,8 +82,10 @@ Code Sample
 
 Execution 
 ------------
+The execution process of iterating the list can be visualized on <a http://pythontutor.com/">Python Tutorial</a>
 
-
+![Alt text](./1.png "Optional title")
+![Alt text](./2.png "Optional title")
 
 <b>SETUP_LOOP</b>
 
