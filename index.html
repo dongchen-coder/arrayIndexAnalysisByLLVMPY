@@ -1,25 +1,86 @@
-<h1>Tutorial for Python List</h1>
+<h1>Tutorial for Iterating Over a Python List</h1>
 
 <p>Dong Chen</p>
 
 <h2>Introduction</h2>
 
-<p>hello</p>
+<p>A Python list is an ordered sequence of items which don’t have to be of the same type. Numbers, letters, strings, nested lists can on the same list.</p>
+
+<p>List creation:</p>
+
+<p>The plain way to create a Python list is just by statically writing the items between square brackets.</p>
+
+<p>list ＝ ［ 1，‘a’， “hello”， sublist， Student(“Dong”) ］</p>
+
+<p>List can also be created by list comprehensions. List comprehension is a description about what list should be created. It contains two parts: one is what
+the items in the list will be like, the other is how to get them.</p>
+
+<p>list = [ x+y for x in ‘one’ for y in ’two’]</p>
+
+<blockquote>
+  <blockquote>
+  <blockquote>
+  <p>list
+[‘ot’,’ow’,’oo’,’nt’,’nw’,’no’,’et’,’ew’,’eo’]</p>
+</blockquote>
+
+<p></blockquote></p>
+
+<p></blockquote></p>
+
+<p>Iterating over a Python list</p>
+
+<p>list = [1, 2, 3, 4]
+for item in list:
+  print (item)</p>
 
 <h2>Code Sample</h2>
 
-<p>Python Code
-    hello</p>
+<p>Python Code</p>
 
-<p>Assemble Code
-        __hello</p>
+<p>list = [1, 2, 3, 4]
+for item in list:
+  print (item)</p>
 
-<p>~~Mistaken text.~~</p>
+<p>Assemble Code</p>
+
+<p>1           0 LOAD<em>CONST               0 (1)
+              3 LOAD</em>CONST               1 (2)
+              6 LOAD<em>CONST               2 (3)
+              9 LOAD</em>CONST               3 (4)
+             12 BUILD<em>LIST               4
+             15 STORE</em>NAME               0 (list)</p>
+
+<p>2          18 SETUP<em>LOOP              19 (to 40)
+             21 LOAD</em>NAME                0 (list)
+             24 GET_ITER            </p>
+
+<blockquote>
+  <blockquote>
+  <p>25 FOR<em>ITER                11 (to 39)
+             28 STORE</em>NAME               1 (item)</p>
+</blockquote>
+
+<p></blockquote></p>
+
+<p>3          31 LOAD<em>NAME                1 (item)
+             34 PRINT</em>ITEM <br>
+             35 PRINT<em>NEWLINE <br>
+             36 JUMP</em>ABSOLUTE           25</p>
+
+<blockquote>
+  <blockquote>
+  <p>39 POP<em>BLOCK <br>
+  40 LOAD</em>CONST               4 (None)
+             43 RETURN_VALUE</p>
+</blockquote>
+
+<p></blockquote></p>
 
 <h2>Execution </h2>
 
-<p><code>
-function test() {
-  console.log("notice the blank line before this function?");
-}
-</code></p>
+<p>SETUP_LOOP</p>
+
+<p>GET_ITER</p>
+
+<p>FOR_ITER</p>
