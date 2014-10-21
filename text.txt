@@ -87,6 +87,8 @@ The execution process of iterating the list can be visualized on <a http://pytho
 ![Alt text](./1.png "Optional title")
 ![Alt text](./2.png "Optional title")
 
+
+
 <b>SETUP_LOOP</b>
 
 SETUP_LOOP is to create a new block object on the top of the block stack which is maintained in the frame. The block object maintains the address of the first instruction should be executed when the block pop out. Here is INSTR_OFFSET()+oparg = 21+19 = 40. The block object also maintians the the block type which is acturally the operation to create new blocks: SETUP_LOOP, SETUP_EXCEPT, SETUP_FINALLY. Here is SETUP_LOOP.
