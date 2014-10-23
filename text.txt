@@ -82,16 +82,34 @@ The resulting assemble code is listed below:
 
 Execution 
 ------------
+By given a Python code, it will fist be compiled to Python Bytecode. Then the interpreter of Python will execute the Python Bytecode. The framework of Python interpreter is listed below. First, the frame will load the code into PyCodeObject <i>co</i>, then point the pointer <i>first_isntr</i> to the start address of the code. Next, calculate the address of the next instruction and store it to <i>next_instr</i>. Update offset and get opcode out and increase the pointer.
+
+	co = f->f_code;
+	first_instr = (unsigned char*) PyString_AS_STRING(co->co_code);
+ 	next_instr = first_instr + f->f_lasti + 1;
+	f->f_lasti = INSTR_OFFSET(); /*f->f_lasti = next_instr - first_instr */
+	opcode = *next_instr++;
+	
+	switch (opcode) {
+	case (LOAD_CONST): ...
+	case (GET_ITER): ...
+	...
+	}
+	
 The execution process of iterating the list can be visualized on <a http://pythontutor.com/">Python Tutorial</a>. 
 
-![Alt text](./1.png "Optional title")
-![Alt text](./2.png "Optional title")
+![Alt text](./1.png "Creation of list")
 
+![Alt text](./2.png "")
 
+Python Bytecode for Iterating
+---------- 
+
+There are four Python Bytecodes that implemented the iterating function of Python: SETUP_LOOP, GET_ITER, FOR_ITER and JUMP_ABSOLUTE.
 
 <b>SETUP_LOOP</b>
 
-SETUP_LOOP is to create a new block object on the top of the block stack which is maintained in the frame. The block object maintains the address of the first instruction should be executed when the block pop out. Here is INSTR_OFFSET()+oparg = 21+19 = 40. The block object also maintians the the block type which is acturally the operation to create new blocks: SETUP_LOOP, SETUP_EXCEPT, SETUP_FINALLY. Here is SETUP_LOOP.
+SETUP_LOOP is to create a new block object on the top of the block stack which is maintained in the frame. The block object maintains the address of the first instruction should be executed when the block pop out. Here is INSTR_OFFSET()+oparg = 21+19 = 40. The block object also maintians the the block type which is acturally the operation to create new blocks: SETUP_LOOP, SETUP_EXCEPT, SETUP_FINALLY. Here is SETUP_LOOP. 
 
 
 <b>GET_ITER</b>
