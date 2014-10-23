@@ -187,7 +187,7 @@ Then we can compile Python code by comand line:</p>
 
 <h2>Execution </h2>
 
-<p>The execution process of iterating the list can be visualized on <a http://pythontutor.com/">Python Tutorial</a></p>
+<p>The execution process of iterating the list can be visualized on <a http://pythontutor.com/">Python Tutorial</a>.</p>
 
 <p><img src="./1.png" title="Optional title" alt="Alt text" />
 <img src="./2.png" title="Optional title" alt="Alt text" /></p>
@@ -200,8 +200,21 @@ Then we can compile Python code by comand line:</p>
 
 <p>GET_ITER is to get the iterator object for whatever object on the top of the stack. Each Python object type has its own iterator object. PyObject_GetIter() is first to get the type object from the TOP object and then get its iterator object.</p>
 
+<p>The core function of GET_ITER is</p>
+
+<pre><code>PyObject * PyObject_GetIter(PyObject *o) {
+    PyTypeObject *t = o-&gt;ob_type;
+    f = t-&gt;tp_iter;
+    PyObject *res = (*f)(o);   /* list_iter() */
+    return res;
+}
+</code></pre>
+
 <p><b>FOR_ITER</b></p>
 
 <p>FOR_ITER will first call next() function of iterator, if returned object pointer is still a iterator object(not NULL), then push it to stack, CONTINUE to execute the next operation. if the returned pointer is NULL, it means the iterator has reached the end, and pop the iterator object out and jump by the offset of its argument to exit the iteration. HERE is 11.</p>
+
+<pre><code>x = (*v-&gt;ob_type-&gt;tp_iternext)(v) /* listiter_next() */
+</code></pre>
 </body>
 </html>

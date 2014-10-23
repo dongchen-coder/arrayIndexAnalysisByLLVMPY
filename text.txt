@@ -82,7 +82,7 @@ The resulting assemble code is listed below:
 
 Execution 
 ------------
-The execution process of iterating the list can be visualized on <a http://pythontutor.com/">Python Tutorial</a>
+The execution process of iterating the list can be visualized on <a http://pythontutor.com/">Python Tutorial</a>. 
 
 ![Alt text](./1.png "Optional title")
 ![Alt text](./2.png "Optional title")
@@ -98,19 +98,20 @@ SETUP_LOOP is to create a new block object on the top of the block stack which i
 
 GET_ITER is to get the iterator object for whatever object on the top of the stack. Each Python object type has its own iterator object. PyObject_GetIter() is first to get the type object from the TOP object and then get its iterator object.
 
+The core function of GET_ITER is 
+
+	PyObject * PyObject_GetIter(PyObject *o) {
+		PyTypeObject *t = o->ob_type;
+		f = t->tp_iter;
+		PyObject *res = (*f)(o);   /* list_iter() */
+		return res;
+	}
+
 
 <b>FOR_ITER</b>
 
 FOR_ITER will first call next() function of iterator, if returned object pointer is still a iterator object(not NULL), then push it to stack, CONTINUE to execute the next operation. if the returned pointer is NULL, it means the iterator has reached the end, and pop the iterator object out and jump by the offset of its argument to exit the iteration. HERE is 11.
 
+	x = (*v->ob_type->tp_iternext)(v) /* listiter_next() */
 
-
-
-
-
-
-
-
-
-
-
+	
