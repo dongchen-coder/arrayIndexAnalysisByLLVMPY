@@ -53,7 +53,7 @@ Code Sample
   		print (item)
 
 <b>Assemble Code:</b>   
-Then we can compile Python code by comand line:
+Then we can compile Python code to Python Bytecode and display the disassembled Bytecode by comand line:
 	
 	python -m dis filename.py
 
@@ -82,7 +82,7 @@ The resulting assemble code is listed below:
 
 Execution 
 ------------
-By given a Python code, it will fist be compiled to Python Bytecode. Then the interpreter of Python will execute the Python Bytecode. The framework of Python interpreter is listed below. First, the frame will load the code into PyCodeObject <i>co</i>, then point the pointer <i>first_isntr</i> to the start address of the code. Next, calculate the address of the next instruction and store it to <i>next_instr</i>. Update offset and get opcode out and increase the pointer.
+By given a Python code, it will fist be compiled to Python Bytecode. Then the interpreter of Python will execute the Python Bytecode. The framework of Python interpreter is listed below. First, the frame will load the code into PyCodeObject <i>co</i>. Then the pointer <i>first_isntr</i> is pointed to the start address of the code. The address of the next instruction is calculated and stored into <i>next_instr</i>. Finally, offset is updated, instruction is got out to <i>opcode</i> and the pointer <i>next_instr</i> is increased by one. Now the <i>opcode</i> can be excuted by one of the branches of switch. 
 
 	co = f->f_code;
 	first_instr = (unsigned char*) PyString_AS_STRING(co->co_code);
@@ -91,10 +91,21 @@ By given a Python code, it will fist be compiled to Python Bytecode. Then the in
 	opcode = *next_instr++;
 	
 	switch (opcode) {
-	case (LOAD_CONST): ...
-	case (GET_ITER): ...
+	case (LOAD_CONST): ... continue;
+	
+	case (GET_ITER): ...PREDICT(FOR_ITER); continue;
+	
+	PREDICTED_WITH_ARG(FOR_ITER);
+	case (FOR_ITER): ... continue;
+	
 	...
 	}
+	
+We can see that 
+
+	#define PREDICT(op)	  if (*next_instr == op) goto PRED_##op
+	#define PREDICTED_WITH_ARG(op)  PRED_##op: oparg = PEEKARG(); next_instr += 3
+
 	
 The execution process of iterating the list can be visualized on <a http://pythontutor.com/">Python Tutorial</a>. 
 
@@ -109,10 +120,27 @@ There are four Python Bytecodes that implemented the iterating function of Pytho
 
 <b>SETUP_LOOP</b>
 
+	case SETUP_LOOP:
+	case SETUP_EXCEPT:
+    case SETUP_FINALLY:
+    	PyFrame_BlockSetup(f, opcode, INSTR_OFFSET() + oparg, STACK_LEVEL());
+    continue;
+
 SETUP_LOOP is to create a new block object on the top of the block stack which is maintained in the frame. The block object maintains the address of the first instruction should be executed when the block pop out. Here is INSTR_OFFSET()+oparg = 21+19 = 40. The block object also maintians the the block type which is acturally the operation to create new blocks: SETUP_LOOP, SETUP_EXCEPT, SETUP_FINALLY. Here is SETUP_LOOP. 
 
-
 <b>GET_ITER</b>
+
+	case GET_ITER:
+		v = TOP();
+		x = PyObject_GetIter(v);
+		Py_DECREF(v);
+        if (x != NULL) {
+        	SET_TOP(x);
+            PREDICT(FOR_ITER);
+            continue;
+        }
+        STACKADJ(-1);
+        break;
 
 GET_ITER is to get the iterator object for whatever object on the top of the stack. Each Python object type has its own iterator object. PyObject_GetIter() is first to get the type object from the TOP object and then get its iterator object.
 
@@ -127,6 +155,25 @@ The core function of GET_ITER is
 
 
 <b>FOR_ITER</b>
+
+	case FOR_ITER:        
+		v = TOP();
+		x = (*v->ob_type->tp_iternext)(v); 
+			if (x != NULL) {
+				PUSH(x);
+				PREDICT(STORE_FAST);
+				PREDICT(UNPACK_SEQUENCE);
+				continue;
+			}
+			if (PyErr_Occurred()) {
+				if (!PyErr_ExceptionMatches(PyExc_StopIteration))
+                    break;
+                PyErr_Clear();
+            }
+		x = v = POP();
+        Py_DECREF(v);
+        JUMPBY(oparg);
+        continue;
 
 FOR_ITER will first call next() function of iterator, if returned object pointer is still a iterator object(not NULL), then push it to stack, CONTINUE to execute the next operation. if the returned pointer is NULL, it means the iterator has reached the end, and pop the iterator object out and jump by the offset of its argument to exit the iteration. HERE is 11.
 
