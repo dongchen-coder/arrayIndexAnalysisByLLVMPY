@@ -233,5 +233,3 @@ For Python list object, the <i>tp_iternext</i> method is <i>listiter_next</i>. I
     	it->it_seq = NULL;
     	return NULL;
 	}
-
-	
