@@ -1,7 +1,4 @@
 
-
-
-
 Tutorial for Iterating Over a Python List
 ===============
 
