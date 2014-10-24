@@ -114,7 +114,7 @@ We can see in the <i>switch</i> statements, there are a lot of <i>PREDICT()</i>,
 	#define PREDICTED(op)           PRED_##op: next_instr++
 	#define PREDICTED_WITH_ARG(op)  PRED_##op: oparg = PEEKARG(); next_instr += 3
 
-Python Bytecode for Iterating
+Diving into Python Bytecode
 ---------- 
 
 There are four Python Bytecodes that implemented the iterating function of Python: SETUP_LOOP, GET_ITER, FOR_ITER and JUMP_ABSOLUTE.
