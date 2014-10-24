@@ -1,357 +1,44 @@
-<!doctype html>
-<html>
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-<style>
-*{margin:0;padding:0;}
-body {
-	font:13.34px helvetica,arial,freesans,clean,sans-serif;
-	color:black;
-	line-height:1.4em;
-	background-color: #F8F8F8;
-	padding: 0.7em;
-}
-p {
-	margin:1em 0;
-	line-height:1.5em;
-}
-table {
-	font-size:inherit;
-	font:100%;
-	margin:1em;
-}
-table th{border-bottom:1px solid #bbb;padding:.2em 1em;}
-table td{border-bottom:1px solid #ddd;padding:.2em 1em;}
-input[type=text],input[type=password],input[type=image],textarea{font:99% helvetica,arial,freesans,sans-serif;}
-select,option{padding:0 .25em;}
-optgroup{margin-top:.5em;}
-pre,code{font:12px Monaco,"Courier New","DejaVu Sans Mono","Bitstream Vera Sans Mono",monospace;}
-pre {
-	margin:1em 0;
-	font-size:12px;
-	background-color:#eee;
-	border:1px solid #ddd;
-	padding:5px;
-	line-height:1.5em;
-	color:#444;
-	overflow:auto;
-	-webkit-box-shadow:rgba(0,0,0,0.07) 0 1px 2px inset;
-	-webkit-border-radius:3px;
-	-moz-border-radius:3px;border-radius:3px;
-}
-pre code {
-	padding:0;
-	font-size:12px;
-	background-color:#eee;
-	border:none;
-}
-code {
-	font-size:12px;
-	background-color:#f8f8ff;
-	color:#444;
-	padding:0 .2em;
-	border:1px solid #dedede;
-}
-img{border:0;max-width:100%;}
-abbr{border-bottom:none;}
-a{color:#4183c4;text-decoration:none;}
-a:hover{text-decoration:underline;}
-a code,a:link code,a:visited code{color:#4183c4;}
-h2,h3{margin:1em 0;}
-h1,h2,h3,h4,h5,h6{border:0;}
-h1{font-size:170%;border-top:4px solid #aaa;padding-top:.5em;margin-top:1.5em;}
-h1:first-child{margin-top:0;padding-top:.25em;border-top:none;}
-h2{font-size:150%;margin-top:1.5em;border-top:4px solid #e0e0e0;padding-top:.5em;}
-h3{margin-top:1em;}
-hr{border:1px solid #ddd;}
-ul{margin:1em 0 1em 2em;}
-ol{margin:1em 0 1em 2em;}
-ul li,ol li{margin-top:.5em;margin-bottom:.5em;}
-ul ul,ul ol,ol ol,ol ul{margin-top:0;margin-bottom:0;}
-blockquote{margin:1em 0;border-left:5px solid #ddd;padding-left:.6em;color:#555;}
-dt{font-weight:bold;margin-left:1em;}
-dd{margin-left:2em;margin-bottom:1em;}
-sup {
-    font-size: 0.83em;
-    vertical-align: super;
-    line-height: 0;
-}
-* {
-	-webkit-print-color-adjust: exact;
-}
-@media screen and (min-width: 914px) {
-    body {
-        width: 854px;
-        margin:0 auto;
-    }
-}
-@media print {
-	table, pre {
-		page-break-inside: avoid;
-	}
-	pre {
-		word-wrap: break-word;
-	}
-}
-</style>
-<title>
-
-
-
-Tutorial for Iterating Over a Python List
-===============
-
-Dong Chen
-
-Introduction
-------------
-
-A Python list is an</title>
-
-</head>
-<body>
-<h1>Tutorial for Iterating Over a Python List</h1>
-
+<h1 id="tutorial-for-iterating-over-a-python-list">Tutorial for Iterating Over a Python List</h1>
 <p>Dong Chen</p>
-
-<h2>Introduction</h2>
-
+<h2 id="introduction">Introduction</h2>
 <p>A Python list is an ordered sequence of items which don’t have to be of the same type. Numbers, letters, strings, nested lists can on the same list.</p>
-
 <p><b>List creation:</b></p>
-
 <p>The plain way to create a Python list is just by statically writing the items between square brackets.</p>
-
-<pre><code>list ＝ ［ 1，‘a’， “hello”， sublist， Student(“Dong”) ］
-</code></pre>
-
+<pre class="editor-colors lang-python"><div class="line"><span class="source python"><span>&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="support type python"><span>list</span></span><span>&nbsp;＝&nbsp;［&nbsp;</span><span class="constant numeric integer decimal python"><span>1</span></span><span>，‘</span><span>a</span><span>’，&nbsp;“</span><span>hello</span><span>”，&nbsp;</span><span>sublist</span><span>，&nbsp;</span><span class="meta function-call python"><span>Student</span><span class="punctuation definition arguments begin python"><span>(</span></span><span class="meta function-call arguments python"><span>“</span><span>Dong</span><span>”</span></span><span class="punctuation definition arguments end python"><span>)</span></span></span><span>&nbsp;］</span></span></div></pre>
 <p>List can also be created by list comprehensions. List comprehension is a description about what list should be created. It contains two parts: one is what the items in the list will be like, the other is how to get them.</p>
-
-<pre><code>list = [ x+y for x in ‘one’ for y in ’two’]
-&gt;&gt;&gt; list
-&gt;&gt;&gt; [‘ot’,’ow’,’oo’,’nt’,’nw’,’no’,’et’,’ew’,’eo’]
-</code></pre>
-
+<pre class="editor-colors lang-python"><div class="line"><span class="source python"><span>&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="support type python"><span>list</span></span><span>&nbsp;</span><span class="keyword operator assignment python"><span>=</span></span><span>&nbsp;</span><span class="meta structure list python"><span class="punctuation definition list begin python"><span>[</span></span><span>&nbsp;</span><span class="meta structure list item python"><span>x</span><span class="keyword operator arithmetic python"><span>+</span></span><span>y</span><span>&nbsp;</span><span class="keyword control repeat python"><span>for</span></span><span>&nbsp;</span><span>x</span><span>&nbsp;</span><span class="keyword operator logical python"><span>in</span></span><span>&nbsp;‘</span><span>one</span><span>’&nbsp;</span><span class="keyword control repeat python"><span>for</span></span><span>&nbsp;</span><span>y</span><span>&nbsp;</span><span class="keyword operator logical python"><span>in</span></span><span>&nbsp;’</span><span>two</span><span>’</span></span><span class="punctuation definition list end python"><span>]</span></span></span></span></div><div class="line"><span class="source python"><span>&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="keyword operator comparison python"><span>&gt;</span><span>&gt;</span><span>&gt;</span></span><span>&nbsp;</span><span class="support type python"><span>list</span></span></span></div><div class="line"><span class="source python"><span>&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="keyword operator comparison python"><span>&gt;</span><span>&gt;</span><span>&gt;</span></span><span>&nbsp;</span><span class="meta structure list python"><span class="punctuation definition list begin python"><span>[</span></span><span class="meta structure list item python"><span>‘</span><span>ot</span><span>’</span></span><span class="punctuation separator list python"><span>,</span></span><span class="meta structure list item python"><span>’</span><span>ow</span><span>’</span></span><span class="punctuation separator list python"><span>,</span></span><span class="meta structure list item python"><span>’</span><span>oo</span><span>’</span></span><span class="punctuation separator list python"><span>,</span></span><span class="meta structure list item python"><span>’</span><span>nt</span><span>’</span></span><span class="punctuation separator list python"><span>,</span></span><span class="meta structure list item python"><span>’</span><span>nw</span><span>’</span></span><span class="punctuation separator list python"><span>,</span></span><span class="meta structure list item python"><span>’</span><span>no</span><span>’</span></span><span class="punctuation separator list python"><span>,</span></span><span class="meta structure list item python"><span>’</span><span>et</span><span>’</span></span><span class="punctuation separator list python"><span>,</span></span><span class="meta structure list item python"><span>’</span><span>ew</span><span>’</span></span><span class="punctuation separator list python"><span>,</span></span><span class="meta structure list item python"><span>’</span><span>eo</span><span>’</span></span><span class="punctuation definition list end python"><span>]</span></span></span></span></div></pre>
 <p><b>Iterating over a Python list:</b></p>
-
 <p><i>for-in</i> statement in Python can easily perform list iterating.</p>
-
-<pre><code>list = [1, 2, 3, 4]
-for item in list:
-    print (item)
-
-&gt;&gt;&gt;1
-2
-3
-4
-</code></pre>
-
-<h2>Assemble Code</h2>
-
+<pre class="editor-colors lang-python"><div class="line"><span class="source python"><span>&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="support type python"><span>list</span></span><span>&nbsp;</span><span class="keyword operator assignment python"><span>=</span></span><span>&nbsp;</span><span class="meta structure list python"><span class="punctuation definition list begin python"><span>[</span></span><span class="meta structure list item python"><span class="constant numeric integer decimal python"><span>1</span></span></span><span class="punctuation separator list python"><span>,</span></span><span>&nbsp;</span><span class="meta structure list item python"><span class="constant numeric integer decimal python"><span>2</span></span></span><span class="punctuation separator list python"><span>,</span></span><span>&nbsp;</span><span class="meta structure list item python"><span class="constant numeric integer decimal python"><span>3</span></span></span><span class="punctuation separator list python"><span>,</span></span><span>&nbsp;</span><span class="meta structure list item python"><span class="constant numeric integer decimal python"><span>4</span></span></span><span class="punctuation definition list end python"><span>]</span></span></span></span></div><div class="line"><span class="source python"><span>&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="keyword control repeat python"><span>for</span></span><span>&nbsp;</span><span>item</span><span>&nbsp;</span><span class="keyword operator logical python"><span>in</span></span><span>&nbsp;</span><span class="support type python"><span>list</span></span><span>:</span></span></div><div class="line"><span class="source python"><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="keyword other python"><span>print</span></span><span>&nbsp;</span><span>(</span><span>item</span><span>)</span></span></div><div class="line"><span class="source python"><span>&nbsp;</span></span></div><div class="line"><span class="source python"><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="keyword operator comparison python"><span>&gt;</span><span>&gt;</span><span>&gt;</span></span><span class="constant numeric integer decimal python"><span>1</span></span></span></div><div class="line"><span class="source python"><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="constant numeric integer decimal python"><span>2</span></span></span></div><div class="line"><span class="source python"><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="constant numeric integer decimal python"><span>3</span></span></span></div><div class="line"><span class="source python"><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="constant numeric integer decimal python"><span>4</span></span></span></div></pre>
+<h2 id="assemble-code">Assemble Code</h2>
 <p><b>Python Code:</b></p>
-
-<pre><code>list = [1, 2, 3, 4]
-for item in list:
-    print (item)
-</code></pre>
-
-<p><b>Assemble Code:</b> <br/>
+<pre class="editor-colors lang-python"><div class="line"><span class="source python"><span>&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="support type python"><span>list</span></span><span>&nbsp;</span><span class="keyword operator assignment python"><span>=</span></span><span>&nbsp;</span><span class="meta structure list python"><span class="punctuation definition list begin python"><span>[</span></span><span class="meta structure list item python"><span class="constant numeric integer decimal python"><span>1</span></span></span><span class="punctuation separator list python"><span>,</span></span><span>&nbsp;</span><span class="meta structure list item python"><span class="constant numeric integer decimal python"><span>2</span></span></span><span class="punctuation separator list python"><span>,</span></span><span>&nbsp;</span><span class="meta structure list item python"><span class="constant numeric integer decimal python"><span>3</span></span></span><span class="punctuation separator list python"><span>,</span></span><span>&nbsp;</span><span class="meta structure list item python"><span class="constant numeric integer decimal python"><span>4</span></span></span><span class="punctuation definition list end python"><span>]</span></span></span></span></div><div class="line"><span class="source python"><span>&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="keyword control repeat python"><span>for</span></span><span>&nbsp;</span><span>item</span><span>&nbsp;</span><span class="keyword operator logical python"><span>in</span></span><span>&nbsp;</span><span class="support type python"><span>list</span></span><span>:</span></span></div><div class="line"><span class="source python"><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="keyword other python"><span>print</span></span><span>&nbsp;</span><span>(</span><span>item</span><span>)</span></span></div></pre>
+<p><b>Assemble Code:</b>
 Then we can compile Python code to Python Bytecode and display the disassembled Bytecode by command line:</p>
-
-<pre><code>python -m dis filename.py
-</code></pre>
-
-<p>The resulting assemble code is listed below:</p>
-
-<pre><code>1         0 LOAD_CONST               0 (1)
-          3 LOAD_CONST               1 (2)
-          6 LOAD_CONST               2 (3)
-          9 LOAD_CONST               3 (4)
-         12 BUILD_LIST               4
-         15 STORE_NAME               0 (list)
-
-2       18 SETUP_LOOP              19 (to 40)
-         21 LOAD_NAME                0 (list)
-         24 GET_ITER            
-    &gt;&gt;   25 FOR_ITER                11 (to 39)
-         28 STORE_NAME               1 (item)
-
-3        31 LOAD_NAME                1 (item)
-         34 PRINT_ITEM          
-         35 PRINT_NEWLINE       
-         36 JUMP_ABSOLUTE           25
-    &gt;&gt;   39 POP_BLOCK           
-    &gt;&gt;   40 LOAD_CONST               4 (None)
-         43 RETURN_VALUE
-</code></pre>
-
-<h2>Execution Framework</h2>
-
-<p>The execution process of iterating the list can be visualized on <a http://pythontutor.com/">Python Tutorial</a>. Python frame will first create a list contains 4 items and push the list to the execution stack. Then iterator will return items one by one each time when <i>FOR_ITER</i> is executed. The frame will push the item into stack and <i>PRINT_ITEM</i> will pop the item out and display it on screen.</p>
-
-<p><img src="./1.png" alt="Alt text" /></p>
-
-<p><img src="./2.png" alt="Alt text" /></p>
-
+<pre class="editor-colors lang-text"><div class="line"><span class="text plain"><span class="meta paragraph text"><span>python&nbsp;-m&nbsp;dis&nbsp;filename.py</span></span></span></div></pre><p>The resulting assemble code is listed below:</p>
+<pre class="editor-colors lang-python"><div class="line"><span class="source python"><span>&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="constant numeric integer decimal python"><span>1</span></span><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="constant numeric integer decimal python"><span>0</span></span><span>&nbsp;</span><span>LOAD_CONST</span><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="constant numeric integer decimal python"><span>0</span></span><span>&nbsp;</span><span>(</span><span class="constant numeric integer decimal python"><span>1</span></span><span>)</span></span></div><div class="line"><span class="source python"><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="constant numeric integer decimal python"><span>3</span></span><span>&nbsp;</span><span>LOAD_CONST</span><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="constant numeric integer decimal python"><span>1</span></span><span>&nbsp;</span><span>(</span><span class="constant numeric integer decimal python"><span>2</span></span><span>)</span></span></div><div class="line"><span class="source python"><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="constant numeric integer decimal python"><span>6</span></span><span>&nbsp;</span><span>LOAD_CONST</span><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="constant numeric integer decimal python"><span>2</span></span><span>&nbsp;</span><span>(</span><span class="constant numeric integer decimal python"><span>3</span></span><span>)</span></span></div><div class="line"><span class="source python"><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="constant numeric integer decimal python"><span>9</span></span><span>&nbsp;</span><span>LOAD_CONST</span><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="constant numeric integer decimal python"><span>3</span></span><span>&nbsp;</span><span>(</span><span class="constant numeric integer decimal python"><span>4</span></span><span>)</span></span></div><div class="line"><span class="source python"><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="constant numeric integer decimal python"><span>12</span></span><span>&nbsp;</span><span>BUILD_LIST</span><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="constant numeric integer decimal python"><span>4</span></span></span></div><div class="line"><span class="source python"><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="constant numeric integer decimal python"><span>15</span></span><span>&nbsp;</span><span>STORE_NAME</span><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="constant numeric integer decimal python"><span>0</span></span><span>&nbsp;</span><span>(</span><span class="support type python"><span>list</span></span><span>)</span></span></div><div class="line"><span class="source python"><span>&nbsp;</span></span></div><div class="line"><span class="source python"><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="constant numeric integer decimal python"><span>2</span></span><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="constant numeric integer decimal python"><span>18</span></span><span>&nbsp;</span><span>SETUP_LOOP</span><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="constant numeric integer decimal python"><span>19</span></span><span>&nbsp;</span><span>(</span><span>to</span><span>&nbsp;</span><span class="constant numeric integer decimal python"><span>40</span></span><span>)</span></span></div><div class="line"><span class="source python"><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="constant numeric integer decimal python"><span>21</span></span><span>&nbsp;</span><span>LOAD_NAME</span><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="constant numeric integer decimal python"><span>0</span></span><span>&nbsp;</span><span>(</span><span class="support type python"><span>list</span></span><span>)</span></span></div><div class="line"><span class="source python"><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="constant numeric integer decimal python"><span>24</span></span><span>&nbsp;</span><span>GET_ITER</span></span></div><div class="line"><span class="source python"><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="keyword operator comparison python"><span>&gt;</span><span>&gt;</span></span><span>&nbsp;&nbsp;&nbsp;</span><span class="constant numeric integer decimal python"><span>25</span></span><span>&nbsp;</span><span>FOR_ITER</span><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="constant numeric integer decimal python"><span>11</span></span><span>&nbsp;</span><span>(</span><span>to</span><span>&nbsp;</span><span class="constant numeric integer decimal python"><span>39</span></span><span>)</span></span></div><div class="line"><span class="source python"><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="constant numeric integer decimal python"><span>28</span></span><span>&nbsp;</span><span>STORE_NAME</span><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="constant numeric integer decimal python"><span>1</span></span><span>&nbsp;</span><span>(</span><span>item</span><span>)</span></span></div><div class="line"><span class="source python"><span>&nbsp;</span></span></div><div class="line"><span class="source python"><span>&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="constant numeric integer decimal python"><span>3</span></span><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="constant numeric integer decimal python"><span>31</span></span><span>&nbsp;</span><span>LOAD_NAME</span><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="constant numeric integer decimal python"><span>1</span></span><span>&nbsp;</span><span>(</span><span>item</span><span>)</span></span></div><div class="line"><span class="source python"><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="constant numeric integer decimal python"><span>34</span></span><span>&nbsp;</span><span>PRINT_ITEM</span></span></div><div class="line"><span class="source python"><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="constant numeric integer decimal python"><span>35</span></span><span>&nbsp;</span><span>PRINT_NEWLINE</span></span></div><div class="line"><span class="source python"><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="constant numeric integer decimal python"><span>36</span></span><span>&nbsp;</span><span>JUMP_ABSOLUTE</span><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="constant numeric integer decimal python"><span>25</span></span></span></div><div class="line"><span class="source python"><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="keyword operator comparison python"><span>&gt;</span><span>&gt;</span></span><span>&nbsp;&nbsp;&nbsp;</span><span class="constant numeric integer decimal python"><span>39</span></span><span>&nbsp;</span><span>POP_BLOCK</span></span></div><div class="line"><span class="source python"><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="keyword operator comparison python"><span>&gt;</span><span>&gt;</span></span><span>&nbsp;&nbsp;&nbsp;</span><span class="constant numeric integer decimal python"><span>40</span></span><span>&nbsp;</span><span>LOAD_CONST</span><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="constant numeric integer decimal python"><span>4</span></span><span>&nbsp;</span><span>(</span><span class="constant language python"><span>None</span></span><span>)</span></span></div><div class="line"><span class="source python"><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="constant numeric integer decimal python"><span>43</span></span><span>&nbsp;</span><span>RETURN_VALUE</span></span></div></pre>
+<h2 id="execution-framework">Execution Framework</h2>
+<p>The execution process of iterating the list can be visualized on &lt;a <a href="http://pythontutor.com/&quot;&gt;Python">http://pythontutor.com/"&gt;Python</a> Tutorial. Python frame will first create a list contains 4 items and push the list to the execution stack. Then iterator will return items one by one each time when <i>FOR_ITER</i> is executed. The frame will push the item into stack and <i>PRINT_ITEM</i> will pop the item out and display it on screen.</p>
+<p><img src="/Users/urcs/Course/DL/dongchen-coder.github.io/1.png" alt="Alt text"></p>
+<p><img src="/Users/urcs/Course/DL/dongchen-coder.github.io/2.png" alt="Alt text"></p>
 <p>By given a Python code, it will first be compiled to Python Bytecode. Then the interpreter of Python will execute the Python Bytecode. The framework of Python interpreter is listed below. First, the frame will load the code into PyCodeObject <i>co</i>. Then the pointer <i>first_isntr</i> is pointed to the start address of the code. The address of the next instruction is calculated and stored into <i>next_instr</i>. Finally, offset is updated, instruction is got out to <i>opcode</i> and the pointer <i>next_instr</i> is increased by one. Now the <i>opcode</i> can be executed by one of the branches of <i>switch</i>.</p>
-
-<pre><code>...
-co = f-&gt;f_code;
-first_instr = (unsigned char*) PyString_AS_STRING(co-&gt;co_code);
-next_instr = first_instr + f-&gt;f_lasti + 1;
-for (;;) {
-    f-&gt;f_lasti = INSTR_OFFSET(); /*f-&gt;f_lasti = next_instr - first_instr */
-    opcode = *next_instr++;
-
-    switch (opcode) {
-        case (LOAD_CONST): ... continue;
-
-        case (...): ... break;
-
-        case (GET_ITER): ...PREDICT(FOR_ITER); continue;
-
-        PREDICTED_WITH_ARG(FOR_ITER);
-        case (FOR_ITER): ... continue;
-
-        ...
-    }
-}
-</code></pre>
-
+<pre class="editor-colors lang-c"><div class="line"><span class="source c"><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;...</span></span></div><div class="line"><span class="source c"><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;co&nbsp;=&nbsp;f-&gt;f_code;</span></span></div><div class="line"><span class="source c"><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;first_instr&nbsp;=&nbsp;(</span><span class="storage type c"><span>unsigned</span></span><span>&nbsp;</span><span class="storage type c"><span>char</span></span><span>*)</span></span></div><div class="line"><span class="source c"><span class="meta function c"><span class="punctuation whitespace function leading c"><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></span><span class="entity name function c"><span>PyString_AS_STRING</span></span><span class="meta parens c"><span class="punctuation section parens begin c"><span>(</span></span><span>co-&gt;co_code</span><span class="punctuation section parens end c"><span>)</span></span></span><span>;</span></span></span></div><div class="line"><span class="source c"><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;next_instr&nbsp;=&nbsp;first_instr&nbsp;+&nbsp;f-&gt;f_lasti&nbsp;+&nbsp;</span><span class="constant numeric c"><span>1</span></span><span>;</span></span></div><div class="line"><span class="source c"><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="keyword control c"><span>for</span></span><span>&nbsp;(;;)&nbsp;</span><span class="meta block c"><span class="punctuation section block begin c"><span>{</span></span></span></span></div><div class="line"><span class="source c"><span class="meta block c"><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;f-&gt;f_lasti&nbsp;=</span><span class="meta function-call c"><span class="punctuation whitespace function-call leading c"><span>&nbsp;</span></span><span class="support function any-method c"><span>INSTR_OFFSET</span></span><span>(</span></span><span>);&nbsp;</span><span class="comment block c"><span class="punctuation definition comment begin c"><span>/*</span></span><span>f-&gt;f_lasti&nbsp;=&nbsp;next_instr&nbsp;-&nbsp;first_instr&nbsp;</span><span class="punctuation definition comment end c"><span>*/</span></span></span></span></span></div><div class="line"><span class="source c"><span class="meta block c"><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;opcode&nbsp;=&nbsp;*next_instr++;</span></span></span></div><div class="line"><span class="source c"><span class="meta block c"><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="keyword control c"><span>switch</span></span><span class="meta initialization c"><span>&nbsp;</span><span class="punctuation definition parameters c"><span>(</span></span></span><span>opcode)&nbsp;</span><span class="meta block c"><span class="punctuation section block begin c"><span>{</span></span></span></span></span></div><div class="line"><span class="source c"><span class="meta block c"><span class="meta block c"><span class="meta function-call c"><span class="punctuation whitespace function-call leading c"><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></span><span class="support function any-method c"><span>case</span></span><span>&nbsp;(</span></span><span>LOAD_CONST):&nbsp;...&nbsp;</span><span class="keyword control c"><span>continue</span></span><span>;</span></span></span></span></div><div class="line"><span class="source c"><span class="meta block c"><span class="meta block c"><span>&nbsp;</span></span></span></span></div><div class="line"><span class="source c"><span class="meta block c"><span class="meta block c"><span class="meta function-call c"><span class="punctuation whitespace function-call leading c"><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></span><span class="support function any-method c"><span>case</span></span><span>&nbsp;(</span></span><span>...):&nbsp;...&nbsp;</span><span class="keyword control c"><span>break</span></span><span>;</span></span></span></span></div><div class="line"><span class="source c"><span class="meta block c"><span class="meta block c"><span>&nbsp;</span></span></span></span></div><div class="line"><span class="source c"><span class="meta block c"><span class="meta block c"><span class="meta function-call c"><span class="punctuation whitespace function-call leading c"><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></span><span class="support function any-method c"><span>case</span></span><span>&nbsp;(</span></span><span>GET_ITER):&nbsp;...</span><span class="meta function-call c"><span class="support function any-method c"><span>PREDICT</span></span><span>(</span></span><span>FOR_ITER);&nbsp;</span><span class="keyword control c"><span>continue</span></span><span>;</span></span></span></span></div><div class="line"><span class="source c"><span class="meta block c"><span class="meta block c"><span>&nbsp;</span></span></span></span></div><div class="line"><span class="source c"><span class="meta block c"><span class="meta block c"><span class="meta function-call c"><span class="punctuation whitespace function-call leading c"><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></span><span class="support function any-method c"><span>PREDICTED_WITH_ARG</span></span><span>(</span></span><span>FOR_ITER);</span></span></span></span></div><div class="line"><span class="source c"><span class="meta block c"><span class="meta block c"><span class="meta function-call c"><span class="punctuation whitespace function-call leading c"><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></span><span class="support function any-method c"><span>case</span></span><span>&nbsp;(</span></span><span>FOR_ITER):&nbsp;...&nbsp;</span><span class="keyword control c"><span>continue</span></span><span>;</span></span></span></span></div><div class="line"><span class="source c"><span class="meta block c"><span class="meta block c"><span>&nbsp;</span></span></span></span></div><div class="line"><span class="source c"><span class="meta block c"><span class="meta block c"><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;...</span></span></span></span></div><div class="line"><span class="source c"><span class="meta block c"><span class="meta block c"><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="punctuation section block end c"><span>}</span></span></span></span></span></div><div class="line"><span class="source c"><span class="meta block c"><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="punctuation section block end c"><span>}</span></span></span></span></div></pre>
 <p>We can see in the <i>switch</i> statements, there are a lot of <i>PREDICT()</i>, <i>PREDICTED()</i> and <i>PREDITED_WITH_ARG()</i> macros are defined. These macros are used in pairs. <i>PREDICT()</i> will guess the next operation, if the next operation is <i>op</i>, it means that the prediction is successful and can directly jump to the <i>PREDICTED()</i> or <i>PREDITED_WITH_ARG()</i> which actually defines the label.</p>
-
-<pre><code>#define PREDICT(op)   if (*next_instr == op) goto PRED_##op
-#define PREDICTED(op)           PRED_##op: next_instr++
-#define PREDICTED_WITH_ARG(op)  PRED_##op: oparg = PEEKARG(); next_instr += 3
-</code></pre>
-
-<h2>Python Bytecode for Iterating</h2>
-
+<pre class="editor-colors lang-c"><div class="line"><span class="source c"><span class="meta preprocessor macro c"><span>&nbsp;&nbsp;&nbsp;&nbsp;#</span><span class="keyword control import define c"><span>define</span></span><span>&nbsp;</span><span class="entity name function preprocessor c"><span>PREDICT</span></span><span class="punctuation definition parameters begin c"><span>(</span></span><span class="variable parameter preprocessor c"><span>op</span></span><span class="punctuation definition parameters end c"><span>)</span></span><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="keyword control c"><span>if</span></span><span>&nbsp;(*next_instr&nbsp;==&nbsp;op)&nbsp;</span><span class="keyword control c"><span>goto</span></span><span>&nbsp;PRED_##op</span></span></span></div><div class="line"><span class="source c"><span class="meta preprocessor macro c"><span>&nbsp;&nbsp;&nbsp;&nbsp;#</span><span class="keyword control import define c"><span>define</span></span><span>&nbsp;</span><span class="entity name function preprocessor c"><span>PREDICTED</span></span><span class="punctuation definition parameters begin c"><span>(</span></span><span class="variable parameter preprocessor c"><span>op</span></span><span class="punctuation definition parameters end c"><span>)</span></span><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;PRED_##op:&nbsp;next_instr++</span></span></span></div><div class="line"><span class="source c"><span class="meta preprocessor macro c"><span>&nbsp;&nbsp;&nbsp;&nbsp;#</span><span class="keyword control import define c"><span>define</span></span><span>&nbsp;</span><span class="entity name function preprocessor c"><span>PREDICTED_WITH_ARG</span></span><span class="punctuation definition parameters begin c"><span>(</span></span><span class="variable parameter preprocessor c"><span>op</span></span><span class="punctuation definition parameters end c"><span>)</span></span><span>&nbsp;&nbsp;PRED_##op:&nbsp;oparg&nbsp;=&nbsp;PEEKARG();&nbsp;next_instr&nbsp;+=&nbsp;</span><span class="constant numeric c"><span>3</span></span></span></span></div></pre>
+<h2 id="python-bytecode-for-iterating">Python Bytecode for Iterating</h2>
 <p>There are four Python Bytecodes that implemented the iterating function of Python: SETUP_LOOP, GET_ITER, FOR_ITER and JUMP_ABSOLUTE.</p>
-
 <p><b>SETUP_LOOP</b></p>
-
-<pre><code>case SETUP_LOOP:
-case SETUP_EXCEPT:
-case SETUP_FINALLY:
-    PyFrame_BlockSetup(f, opcode, INSTR_OFFSET() + oparg, STACK_LEVEL());
-continue;
-</code></pre>
-
+<pre class="editor-colors lang-c"><div class="line"><span class="source c"><span>&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="keyword control c"><span>case</span></span><span>&nbsp;SETUP_LOOP:</span></span></div><div class="line"><span class="source c"><span>&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="keyword control c"><span>case</span></span><span>&nbsp;SETUP_EXCEPT:</span></span></div><div class="line"><span class="source c"><span>&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="keyword control c"><span>case</span></span><span>&nbsp;SETUP_FINALLY:</span></span></div><div class="line"><span class="source c"><span class="meta function c"><span class="punctuation whitespace function leading c"><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></span><span class="entity name function c"><span>PyFrame_BlockSetup</span></span><span class="meta parens c"><span class="punctuation section parens begin c"><span>(</span></span><span>f,&nbsp;opcode,&nbsp;INSTR_OFFSET(</span><span class="punctuation section parens end c"><span>)</span></span></span><span>&nbsp;+&nbsp;oparg,&nbsp;STACK_LEVEL</span><span class="meta parens c"><span class="punctuation section parens begin c"><span>(</span></span><span class="punctuation section parens end c"><span>)</span></span></span><span>)</span><span>;</span></span></span></div><div class="line"><span class="source c"><span>&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="keyword control c"><span>continue</span></span><span>;</span></span></div></pre>
 <p>SETUP_LOOP is to create a basic block which contains the body of the loop. It will create a block object which maintains the exit address of the next instruction should be executed when the block pop out of the block stack. <i>INSTR_OFFSET() + oparg</i> calculates the exit address. <i>opcode</i> is the value of macro SETUP_LOOP, SETUP_EXCEPT or SETUP_FINALLY which will be recorded by the Python block object.</p>
-
 <p><b>GET_ITER</b></p>
-
-<pre><code>case GET_ITER:
-    v = TOP();
-    x = PyObject_GetIter(v);
-    Py_DECREF(v);
-    if (x != NULL) {
-        SET_TOP(x);
-        PREDICT(FOR_ITER);
-        continue;
-    }
-    STACKADJ(-1);
-    break;
-</code></pre>
-
-<p>GET_ITER is to get the iterator object for whatever object on the top of the execution stack. If the top object does not have an iterator object, the top object will be popped out of the stack. Else <i>PyObject_GetIter()</i> will return the iterator. The function which can return the iterators are implemented in Python type object, each Python type has its own iterator method whose entrance can be found by <i>t->tp_iter</i>.</p>
-
-<pre><code>PyObject * PyObject_GetIter(PyObject *o) {
-    PyTypeObject *t = o-&gt;ob_type;
-    f = t-&gt;tp_iter;
-    PyObject *res = (*f)(o);   /* list_iter() */
-    return res;
-}
-</code></pre>
-
-<p>For Python list object, based on the definition of PyList_Type the function entrance got by <i>t->tp_iter</i> is <i>list_iter</i>. <i>list_iter&lt;\i> will create a list iterator object which contains both the index and pointer to the original list object.</p>
-
-<pre><code>PyTypeObject PyList_Type = {
-...
-list_iter,                                  /* tp_iter */
-0,                                          /* tp_iternext */
-list_methods,                               /* tp_methods */
-...
-};
-
-static PyObject * list_iter(PyObject *seq)
-{
-    listiterobject *it;
-
-    if (!PyList_Check(seq)) {
-        PyErr_BadInternalCall();
-        return NULL;
-    }
-    it = PyObject_GC_New(listiterobject, &amp;PyListIter_Type);
-    if (it == NULL)
-        return NULL;
-    it-&gt;it_index = 0;
-    Py_INCREF(seq);
-    it-&gt;it_seq = (PyListObject *)seq;
-    _PyObject_GC_TRACK(it);
-    return (PyObject *)it;
-}
-</code></pre>
-
+<pre class="editor-colors lang-c"><div class="line"><span class="source c"><span>&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="keyword control c"><span>case</span></span><span>&nbsp;GET_ITER:</span></span></div><div class="line"><span class="source c"><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;v&nbsp;=&nbsp;TOP();</span></span></div><div class="line"><span class="source c"><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;x&nbsp;=&nbsp;PyObject_GetIter(v);</span></span></div><div class="line"><span class="source c"><span class="meta function c"><span class="punctuation whitespace function leading c"><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></span><span class="entity name function c"><span>Py_DECREF</span></span><span class="meta parens c"><span class="punctuation section parens begin c"><span>(</span></span><span>v</span><span class="punctuation section parens end c"><span>)</span></span></span><span>;</span></span></span></div><div class="line"><span class="source c"><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="keyword control c"><span>if</span></span><span>&nbsp;(x&nbsp;!=&nbsp;</span><span class="constant language c"><span>NULL</span></span><span>)&nbsp;</span><span class="meta block c"><span class="punctuation section block begin c"><span>{</span></span></span></span></div><div class="line"><span class="source c"><span class="meta block c"><span class="meta function-call c"><span class="punctuation whitespace function-call leading c"><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></span><span class="support function any-method c"><span>SET_TOP</span></span><span>(</span></span><span>x);</span></span></span></div><div class="line"><span class="source c"><span class="meta block c"><span class="meta function-call c"><span class="punctuation whitespace function-call leading c"><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></span><span class="support function any-method c"><span>PREDICT</span></span><span>(</span></span><span>FOR_ITER);</span></span></span></div><div class="line"><span class="source c"><span class="meta block c"><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="keyword control c"><span>continue</span></span><span>;</span></span></span></div><div class="line"><span class="source c"><span class="meta block c"><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="punctuation section block end c"><span>}</span></span></span></span></div><div class="line"><span class="source c"><span class="meta function c"><span class="punctuation whitespace function leading c"><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></span><span class="entity name function c"><span>STACKADJ</span></span><span class="meta parens c"><span class="punctuation section parens begin c"><span>(</span></span><span>-</span><span class="constant numeric c"><span>1</span></span><span class="punctuation section parens end c"><span>)</span></span></span><span>;</span></span></span></div><div class="line"><span class="source c"><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="keyword control c"><span>break</span></span><span>;</span></span></div></pre>
+<p>GET_ITER is to get the iterator object for whatever object on the top of the execution stack. If the top object does not have an iterator object, the top object will be popped out of the stack. Else <i>PyObject_GetIter()</i> will return the iterator. The function which can return the iterators are implemented in Python type object, each Python type has its own iterator method whose entrance can be found by <i>t-&gt;tp_iter</i>.</p>
+<pre class="editor-colors lang-c"><div class="line"><span class="source c"><span>&nbsp;&nbsp;&nbsp;&nbsp;PyObject&nbsp;*</span><span class="meta function c"><span class="punctuation whitespace function leading c"><span>&nbsp;</span></span><span class="entity name function c"><span>PyObject_GetIter</span></span><span class="meta parens c"><span class="punctuation section parens begin c"><span>(</span></span><span>PyObject&nbsp;*o</span><span class="punctuation section parens end c"><span>)</span></span></span><span>&nbsp;</span><span class="meta block c"><span class="punctuation section block begin c"><span>{</span></span></span></span></span></div><div class="line"><span class="source c"><span class="meta function c"><span class="meta block c"><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;PyTypeObject&nbsp;*t&nbsp;=&nbsp;o-&gt;ob_type;</span></span></span></span></div><div class="line"><span class="source c"><span class="meta function c"><span class="meta block c"><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;f&nbsp;=&nbsp;t-&gt;tp_iter;</span></span></span></span></div><div class="line"><span class="source c"><span class="meta function c"><span class="meta block c"><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;PyObject&nbsp;*res&nbsp;=&nbsp;(*f)(o);&nbsp;&nbsp;&nbsp;</span><span class="comment block c"><span class="punctuation definition comment begin c"><span>/*</span></span><span>&nbsp;list_iter()&nbsp;</span><span class="punctuation definition comment end c"><span>*/</span></span></span></span></span></span></div><div class="line"><span class="source c"><span class="meta function c"><span class="meta block c"><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="keyword control c"><span>return</span></span><span>&nbsp;res;</span></span></span></span></div><div class="line"><span class="source c"><span class="meta function c"><span class="meta block c"><span>&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="punctuation section block end c"><span>}</span></span></span></span></span></div></pre>
+<p>For Python list object, based on the definition of PyList_Type the function entrance got by <i>t-&gt;tp_iter</i> is <i>list_iter</i>. <i>list_iter&lt;\i&gt; will create a list iterator object which contains both the index and pointer to the original list object.</i></p>
+<pre class="editor-colors lang-c"><div class="line"><span class="source c"><span>&nbsp;&nbsp;&nbsp;&nbsp;PyTypeObject&nbsp;PyList_Type&nbsp;=&nbsp;</span><span class="meta block c"><span class="punctuation section block begin c"><span>{</span></span></span></span></div><div class="line"><span class="source c"><span class="meta block c"><span>&nbsp;&nbsp;&nbsp;&nbsp;...</span></span></span></div><div class="line"><span class="source c"><span class="meta block c"><span>&nbsp;&nbsp;&nbsp;&nbsp;list_iter,&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="comment block c"><span class="punctuation definition comment begin c"><span>/*</span></span><span>&nbsp;tp_iter&nbsp;</span><span class="punctuation definition comment end c"><span>*/</span></span></span></span></span></div><div class="line"><span class="source c"><span class="meta block c"><span>&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="constant numeric c"><span>0</span></span><span>,&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="comment block c"><span class="punctuation definition comment begin c"><span>/*</span></span><span>&nbsp;tp_iternext&nbsp;</span><span class="punctuation definition comment end c"><span>*/</span></span></span></span></span></div><div class="line"><span class="source c"><span class="meta block c"><span>&nbsp;&nbsp;&nbsp;&nbsp;list_methods,&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="comment block c"><span class="punctuation definition comment begin c"><span>/*</span></span><span>&nbsp;tp_methods&nbsp;</span><span class="punctuation definition comment end c"><span>*/</span></span></span></span></span></div><div class="line"><span class="source c"><span class="meta block c"><span>&nbsp;&nbsp;&nbsp;&nbsp;...</span></span></span></div><div class="line"><span class="source c"><span class="meta block c"><span>&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="punctuation section block end c"><span>}</span></span></span><span>;</span></span></div><div class="line"><span class="source c"><span>&nbsp;</span></span></div><div class="line"><span class="source c"><span>&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="storage modifier c"><span>static</span></span><span>&nbsp;PyObject&nbsp;*</span><span class="meta function c"><span class="punctuation whitespace function leading c"><span>&nbsp;</span></span><span class="entity name function c"><span>list_iter</span></span><span class="meta parens c"><span class="punctuation section parens begin c"><span>(</span></span><span>PyObject&nbsp;*seq</span><span class="punctuation section parens end c"><span>)</span></span></span></span></span></div><div class="line"><span class="source c"><span class="meta function c"><span>&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="meta block c"><span class="punctuation section block begin c"><span>{</span></span></span></span></span></div><div class="line"><span class="source c"><span class="meta function c"><span class="meta block c"><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;listiterobject&nbsp;*it;</span></span></span></span></div><div class="line"><span class="source c"><span class="meta function c"><span class="meta block c"><span>&nbsp;</span></span></span></span></div><div class="line"><span class="source c"><span class="meta function c"><span class="meta block c"><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="keyword control c"><span>if</span></span><span class="meta initialization c"><span>&nbsp;</span><span class="punctuation definition parameters c"><span>(</span></span></span><span>!</span><span class="meta function-call c"><span class="support function any-method c"><span>PyList_Check</span></span><span>(</span></span><span>seq))&nbsp;</span><span class="meta block c"><span class="punctuation section block begin c"><span>{</span></span></span></span></span></span></div><div class="line"><span class="source c"><span class="meta function c"><span class="meta block c"><span class="meta block c"><span class="meta function-call c"><span class="punctuation whitespace function-call leading c"><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></span><span class="support function any-method c"><span>PyErr_BadInternalCall</span></span><span>(</span></span><span>);</span></span></span></span></span></div><div class="line"><span class="source c"><span class="meta function c"><span class="meta block c"><span class="meta block c"><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="keyword control c"><span>return</span></span><span>&nbsp;</span><span class="constant language c"><span>NULL</span></span><span>;</span></span></span></span></span></div><div class="line"><span class="source c"><span class="meta function c"><span class="meta block c"><span class="meta block c"><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="punctuation section block end c"><span>}</span></span></span></span></span></span></div><div class="line"><span class="source c"><span class="meta function c"><span class="meta block c"><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;it&nbsp;=</span><span class="meta function-call c"><span class="punctuation whitespace function-call leading c"><span>&nbsp;</span></span><span class="support function any-method c"><span>PyObject_GC_New</span></span><span>(</span></span><span>listiterobject,&nbsp;&amp;PyListIter_Type);</span></span></span></span></div><div class="line"><span class="source c"><span class="meta function c"><span class="meta block c"><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="keyword control c"><span>if</span></span><span class="meta initialization c"><span>&nbsp;</span><span class="punctuation definition parameters c"><span>(</span></span></span><span>it&nbsp;==&nbsp;</span><span class="constant language c"><span>NULL</span></span><span>)</span></span></span></span></div><div class="line"><span class="source c"><span class="meta function c"><span class="meta block c"><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="keyword control c"><span>return</span></span><span>&nbsp;</span><span class="constant language c"><span>NULL</span></span><span>;</span></span></span></span></div><div class="line"><span class="source c"><span class="meta function c"><span class="meta block c"><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;it-&gt;it_index&nbsp;=&nbsp;</span><span class="constant numeric c"><span>0</span></span><span>;</span></span></span></span></div><div class="line"><span class="source c"><span class="meta function c"><span class="meta block c"><span class="meta function-call c"><span class="punctuation whitespace function-call leading c"><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></span><span class="support function any-method c"><span>Py_INCREF</span></span><span>(</span></span><span>seq);</span></span></span></span></div><div class="line"><span class="source c"><span class="meta function c"><span class="meta block c"><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;it-&gt;it_seq&nbsp;=&nbsp;(PyListObject&nbsp;*)seq;</span></span></span></span></div><div class="line"><span class="source c"><span class="meta function c"><span class="meta block c"><span class="meta function-call c"><span class="punctuation whitespace function-call leading c"><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></span><span class="support function any-method c"><span>_PyObject_GC_TRACK</span></span><span>(</span></span><span>it);</span></span></span></span></div><div class="line"><span class="source c"><span class="meta function c"><span class="meta block c"><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="keyword control c"><span>return</span></span><span>&nbsp;(PyObject&nbsp;*)it;</span></span></span></span></div><div class="line"><span class="source c"><span class="meta function c"><span class="meta block c"><span>&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="punctuation section block end c"><span>}</span></span></span></span></span></div></pre>
 <p><b>FOR_ITER</b></p>
-
-<pre><code>case FOR_ITER:        
-    v = TOP();
-    x = (*v-&gt;ob_type-&gt;tp_iternext)(v); 
-        if (x != NULL) {
-            PUSH(x);
-            PREDICT(STORE_FAST);
-            PREDICT(UNPACK_SEQUENCE);
-            continue;
-        }
-        if (PyErr_Occurred()) {
-            if (!PyErr_ExceptionMatches(PyExc_StopIteration))
-                break;
-            PyErr_Clear();
-        }
-    x = v = POP();
-    Py_DECREF(v);
-    JUMPBY(oparg);
-    continue;
-</code></pre>
-
-<p>FOR_ITER is actually to let the iterator return the next object and push it into stack. If iterator has reached the end, NULL will be returned. Then the iterator object will be popped out and jump to the operation with address of next operation add an offset <i>oparg</i> which will exit the iteration. The way to get the entrance to the next method of iterators works the same way as getting the entrance of the function which returns the iterator. The next method are implemented in the Python type object and the entrance of the next method can be get by <i>type->tp_iternext</i>.</p>
-
-<pre><code>PyTypeObject PyListIter_Type = {
-    ...
-    PyObject_SelfIter,                          /* tp_iter */
-    (iternextfunc)listiter_next,                /* tp_iternext */
-    listiter_methods,                           /* tp_methods */
-    ...
-};
-</code></pre>
-
+<pre class="editor-colors lang-c"><div class="line"><span class="source c"><span>&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="keyword control c"><span>case</span></span><span>&nbsp;FOR_ITER:</span></span></div><div class="line"><span class="source c"><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;v&nbsp;=&nbsp;TOP();</span></span></div><div class="line"><span class="source c"><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;x&nbsp;=&nbsp;(*v-&gt;ob_type-&gt;tp_iternext)(v);</span></span></div><div class="line"><span class="source c"><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="keyword control c"><span>if</span></span><span>&nbsp;(x&nbsp;!=&nbsp;</span><span class="constant language c"><span>NULL</span></span><span>)&nbsp;</span><span class="meta block c"><span class="punctuation section block begin c"><span>{</span></span></span></span></div><div class="line"><span class="source c"><span class="meta block c"><span class="meta function-call c"><span class="punctuation whitespace function-call leading c"><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></span><span class="support function any-method c"><span>PUSH</span></span><span>(</span></span><span>x);</span></span></span></div><div class="line"><span class="source c"><span class="meta block c"><span class="meta function-call c"><span class="punctuation whitespace function-call leading c"><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></span><span class="support function any-method c"><span>PREDICT</span></span><span>(</span></span><span>STORE_FAST);</span></span></span></div><div class="line"><span class="source c"><span class="meta block c"><span class="meta function-call c"><span class="punctuation whitespace function-call leading c"><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></span><span class="support function any-method c"><span>PREDICT</span></span><span>(</span></span><span>UNPACK_SEQUENCE);</span></span></span></div><div class="line"><span class="source c"><span class="meta block c"><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="keyword control c"><span>continue</span></span><span>;</span></span></span></div><div class="line"><span class="source c"><span class="meta block c"><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="punctuation section block end c"><span>}</span></span></span></span></div><div class="line"><span class="source c"><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="keyword control c"><span>if</span></span><span>&nbsp;(PyErr_Occurred())&nbsp;</span><span class="meta block c"><span class="punctuation section block begin c"><span>{</span></span></span></span></div><div class="line"><span class="source c"><span class="meta block c"><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="keyword control c"><span>if</span></span><span class="meta initialization c"><span>&nbsp;</span><span class="punctuation definition parameters c"><span>(</span></span></span><span>!</span><span class="meta function-call c"><span class="support function any-method c"><span>PyErr_ExceptionMatches</span></span><span>(</span></span><span>PyExc_StopIteration))</span></span></span></div><div class="line"><span class="source c"><span class="meta block c"><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="keyword control c"><span>break</span></span><span>;</span></span></span></div><div class="line"><span class="source c"><span class="meta block c"><span class="meta function-call c"><span class="punctuation whitespace function-call leading c"><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></span><span class="support function any-method c"><span>PyErr_Clear</span></span><span>(</span></span><span>);</span></span></span></div><div class="line"><span class="source c"><span class="meta block c"><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="punctuation section block end c"><span>}</span></span></span></span></div><div class="line"><span class="source c"><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;x&nbsp;=&nbsp;v&nbsp;=&nbsp;POP();</span></span></div><div class="line"><span class="source c"><span class="meta function c"><span class="punctuation whitespace function leading c"><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></span><span class="entity name function c"><span>Py_DECREF</span></span><span class="meta parens c"><span class="punctuation section parens begin c"><span>(</span></span><span>v</span><span class="punctuation section parens end c"><span>)</span></span></span><span>;</span></span></span></div><div class="line"><span class="source c"><span class="meta function c"><span class="punctuation whitespace function leading c"><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></span><span class="entity name function c"><span>JUMPBY</span></span><span class="meta parens c"><span class="punctuation section parens begin c"><span>(</span></span><span>oparg</span><span class="punctuation section parens end c"><span>)</span></span></span><span>;</span></span></span></div><div class="line"><span class="source c"><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="keyword control c"><span>continue</span></span><span>;</span></span></div></pre>
+<p>FOR_ITER is actually to let the iterator return the next object and push it into stack. If iterator has reached the end, NULL will be returned. Then the iterator object will be popped out and jump to the operation with address of next operation add an offset <i>oparg</i> which will exit the iteration. The way to get the entrance to the next method of iterators works the same way as getting the entrance of the function which returns the iterator. The next method are implemented in the Python type object and the entrance of the next method can be get by <i>type-&gt;tp_iternext</i>.</p>
+<pre class="editor-colors lang-c"><div class="line"><span class="source c"><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;PyTypeObject&nbsp;PyListIter_Type&nbsp;=&nbsp;</span><span class="meta block c"><span class="punctuation section block begin c"><span>{</span></span></span></span></div><div class="line"><span class="source c"><span class="meta block c"><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;...</span></span></span></div><div class="line"><span class="source c"><span class="meta block c"><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;PyObject_SelfIter,&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="comment block c"><span class="punctuation definition comment begin c"><span>/*</span></span><span>&nbsp;tp_iter&nbsp;</span><span class="punctuation definition comment end c"><span>*/</span></span></span></span></span></div><div class="line"><span class="source c"><span class="meta block c"><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(iternextfunc)listiter_next,&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="comment block c"><span class="punctuation definition comment begin c"><span>/*</span></span><span>&nbsp;tp_iternext&nbsp;</span><span class="punctuation definition comment end c"><span>*/</span></span></span></span></span></div><div class="line"><span class="source c"><span class="meta block c"><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;listiter_methods,&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="comment block c"><span class="punctuation definition comment begin c"><span>/*</span></span><span>&nbsp;tp_methods&nbsp;</span><span class="punctuation definition comment end c"><span>*/</span></span></span></span></span></div><div class="line"><span class="source c"><span class="meta block c"><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;...</span></span></span></div><div class="line"><span class="source c"><span class="meta block c"><span>&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="punctuation section block end c"><span>}</span></span></span><span>;</span></span></div></pre>
 <p>For Python list object, the <i>tp_iternext</i> method is <i>listiter_next</i>. It will return the item in list with index <i>it_index</i> and increase the index. If the index equals to the length of the list size, it means the iterator has reached the end and NULL will be returned.</p>
-
-<pre><code>listiter_next(listiterobject *it)
-{
-    PyListObject *seq;
-    PyObject *item;
-
-    assert(it != NULL);
-    seq = it-&gt;it_seq;
-    if (seq == NULL)
-        return NULL;
-    assert(PyList_Check(seq));
-
-    if (it-&gt;it_index &lt; PyList_GET_SIZE(seq)) {
-        item = PyList_GET_ITEM(seq, it-&gt;it_index);
-        ++it-&gt;it_index;
-        Py_INCREF(item);
-        return item;
-    }
-
-    Py_DECREF(seq);
-    it-&gt;it_seq = NULL;
-    return NULL;
-}
-</code></pre>
-</body>
-</html>
+<pre class="editor-colors lang-c"><div class="line"><span class="source c"><span class="meta function c"><span class="punctuation whitespace function leading c"><span>&nbsp;&nbsp;&nbsp;&nbsp;</span></span><span class="entity name function c"><span>listiter_next</span></span><span class="meta parens c"><span class="punctuation section parens begin c"><span>(</span></span><span>listiterobject&nbsp;*it</span><span class="punctuation section parens end c"><span>)</span></span></span></span></span></div><div class="line"><span class="source c"><span class="meta function c"><span>&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="meta block c"><span class="punctuation section block begin c"><span>{</span></span></span></span></span></div><div class="line"><span class="source c"><span class="meta function c"><span class="meta block c"><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;PyListObject&nbsp;*seq;</span></span></span></span></div><div class="line"><span class="source c"><span class="meta function c"><span class="meta block c"><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;PyObject&nbsp;*item;</span></span></span></span></div><div class="line"><span class="source c"><span class="meta function c"><span class="meta block c"><span>&nbsp;</span></span></span></span></div><div class="line"><span class="source c"><span class="meta function c"><span class="meta block c"><span class="punctuation whitespace support function leading c"><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></span><span class="support function C99 c"><span>assert</span></span><span>(it&nbsp;!=&nbsp;</span><span class="constant language c"><span>NULL</span></span><span>);</span></span></span></span></div><div class="line"><span class="source c"><span class="meta function c"><span class="meta block c"><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;seq&nbsp;=&nbsp;it-&gt;it_seq;</span></span></span></span></div><div class="line"><span class="source c"><span class="meta function c"><span class="meta block c"><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="keyword control c"><span>if</span></span><span class="meta initialization c"><span>&nbsp;</span><span class="punctuation definition parameters c"><span>(</span></span></span><span>seq&nbsp;==&nbsp;</span><span class="constant language c"><span>NULL</span></span><span>)</span></span></span></span></div><div class="line"><span class="source c"><span class="meta function c"><span class="meta block c"><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="keyword control c"><span>return</span></span><span>&nbsp;</span><span class="constant language c"><span>NULL</span></span><span>;</span></span></span></span></div><div class="line"><span class="source c"><span class="meta function c"><span class="meta block c"><span class="punctuation whitespace support function leading c"><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></span><span class="support function C99 c"><span>assert</span></span><span>(</span><span class="meta function-call c"><span class="support function any-method c"><span>PyList_Check</span></span><span>(</span></span><span>seq));</span></span></span></span></div><div class="line"><span class="source c"><span class="meta function c"><span class="meta block c"><span>&nbsp;</span></span></span></span></div><div class="line"><span class="source c"><span class="meta function c"><span class="meta block c"><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="keyword control c"><span>if</span></span><span class="meta initialization c"><span>&nbsp;</span><span class="punctuation definition parameters c"><span>(</span></span></span><span>it-&gt;it_index&nbsp;&lt;</span><span class="meta function-call c"><span class="punctuation whitespace function-call leading c"><span>&nbsp;</span></span><span class="support function any-method c"><span>PyList_GET_SIZE</span></span><span>(</span></span><span>seq))&nbsp;</span><span class="meta block c"><span class="punctuation section block begin c"><span>{</span></span></span></span></span></span></div><div class="line"><span class="source c"><span class="meta function c"><span class="meta block c"><span class="meta block c"><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;item&nbsp;=</span><span class="meta function-call c"><span class="punctuation whitespace function-call leading c"><span>&nbsp;</span></span><span class="support function any-method c"><span>PyList_GET_ITEM</span></span><span>(</span></span><span>seq,&nbsp;it-&gt;it_index);</span></span></span></span></span></div><div class="line"><span class="source c"><span class="meta function c"><span class="meta block c"><span class="meta block c"><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;++it-&gt;it_index;</span></span></span></span></span></div><div class="line"><span class="source c"><span class="meta function c"><span class="meta block c"><span class="meta block c"><span class="meta function-call c"><span class="punctuation whitespace function-call leading c"><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></span><span class="support function any-method c"><span>Py_INCREF</span></span><span>(</span></span><span>item);</span></span></span></span></span></div><div class="line"><span class="source c"><span class="meta function c"><span class="meta block c"><span class="meta block c"><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="keyword control c"><span>return</span></span><span>&nbsp;item;</span></span></span></span></span></div><div class="line"><span class="source c"><span class="meta function c"><span class="meta block c"><span class="meta block c"><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="punctuation section block end c"><span>}</span></span></span></span></span></span></div><div class="line"><span class="source c"><span class="meta function c"><span class="meta block c"><span>&nbsp;</span></span></span></span></div><div class="line"><span class="source c"><span class="meta function c"><span class="meta block c"><span class="meta function-call c"><span class="punctuation whitespace function-call leading c"><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></span><span class="support function any-method c"><span>Py_DECREF</span></span><span>(</span></span><span>seq);</span></span></span></span></div><div class="line"><span class="source c"><span class="meta function c"><span class="meta block c"><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;it-&gt;it_seq&nbsp;=&nbsp;</span><span class="constant language c"><span>NULL</span></span><span>;</span></span></span></span></div><div class="line"><span class="source c"><span class="meta function c"><span class="meta block c"><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="keyword control c"><span>return</span></span><span>&nbsp;</span><span class="constant language c"><span>NULL</span></span><span>;</span></span></span></span></div><div class="line"><span class="source c"><span class="meta function c"><span class="meta block c"><span>&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="punctuation section block end c"><span>}</span></span></span></span></span></div></pre>
