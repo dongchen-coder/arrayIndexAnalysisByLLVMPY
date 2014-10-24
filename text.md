@@ -82,7 +82,7 @@ The execution process of iterating the list can be visualized on <a http://pytho
 
 ![Alt text](./2.png)
 
-By given a Python code, it will first be compiled to Python Bytecode. Then the interpreter of Python will execute the Python Bytecode. The framework of Python interpreter is listed below. First, the frame will load the code into PyCodeObject <i>co</i>. Then the pointer <i>first_isntr</i> is pointed to the start address of the code. The address of the next instruction is calculated and stored into <i>next_instr</i>. Finally, offset is updated, instruction is got out to <i>opcode</i> and the pointer <i>next_instr</i> is increased by one. Now the <i>opcode</i> can be executed by one of the branches of <i>switch</i>.
+The framework of Python interpreter is listed below. First, the frame will load the code into PyCodeObject <i>co</i>. Then the pointer <i>first_isntr</i> is pointed to the start address of the code. The address of the next instruction is calculated and stored into <i>next_instr</i>. Finally, offset is updated, instruction is got out to <i>opcode</i> and the pointer <i>next_instr</i> is increased by one. Now the <i>opcode</i> can be executed by one of the branches of <i>switch</i>.
 ```c
 		...
 		co = f->f_code;
