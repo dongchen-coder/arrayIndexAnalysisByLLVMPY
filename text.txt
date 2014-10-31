@@ -7,19 +7,13 @@ Dong Chen
 Introduction
 ------------
 
-A Python list is an ordered sequence of items which don’t have to be of the same type. Numbers, letters, strings, nested lists can on the same list.
+<big>A Python list is an ordered sequence of items which don’t have to be of the same type. Numbers, letters, strings, nested lists can on the same list.
 
-<b>List creation:</b>
-
-The plain way to create a Python list is just by statically writing the items between square brackets.
+For example:
  
 	list ＝ ［ 1，‘a’， “hello”， sublist， Student(“Dong”) ］
 
-List can also be created by list comprehensions. List comprehension is a description about what list should be created. It contains two parts: one is what the items in the list will be like, the other is how to get them.
-
 	list = [ x+y for x in ‘one’ for y in ’two’]
-	>>> list
-	>>> [‘ot’,’ow’,’oo’,’nt’,’nw’,’no’,’et’,’ew’,’eo’]
 
   	
 Python Bytecode for Iterating
@@ -162,3 +156,4 @@ The way to get the entrance to the next method of iterators works the same way a
     	return NULL;
 	}
 
+</big>
