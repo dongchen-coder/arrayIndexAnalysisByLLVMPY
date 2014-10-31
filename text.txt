@@ -91,7 +91,7 @@ Diving into Python Bytecode
 
 There are four Python Bytecodes that implemented the iterating function of Python: SETUP_LOOP, GET_ITER, FOR_ITER and JUMP_ABSOLUTE. SETUP_LOOP and GET_ITER will actually do the initialization for looping and FOR_ITER and JUMP_ABSOLUTE will do the looping. We will walk through all the four key Bytecode by tracing iterating over list [1,2,3,4]. 
 
-Before the list iteration, a new block which contains the body of the loop will be ceated. It  maintains the block type and the exit address of the next instruction should be executed when the block pop out of the block stack. <i>opcode</i> is the value of macro SETUP_LOOP, SETUP_EXCEPT or SETUP_FINALLY which will be recorded by the Python block object to define the type which will tell why the block is created. <i>INSTR_OFFSET() + oparg</i> calculates the exit address. In this case the <i>INSTR_OFFSET()</i> is 28 and <i>oparg</i> held by SETUP_LOOP is 11, the result is 39 which is the address of POP_BLOCK.
+Before the list iteration, a new block which contains the body of the loop will be created. It  maintains the block type and the exit address of the next instruction should be executed when the block pop out of the block stack. <i>opcode</i> is the value of macro SETUP_LOOP, SETUP_EXCEPT or SETUP_FINALLY which will be recorded by the Python block object to define the type which will tell why the block is created. <i>INSTR_OFFSET() + oparg</i> calculates the exit address. In this case the <i>INSTR_OFFSET()</i> is 28 and <i>oparg</i> held by SETUP_LOOP is 11, the result is 39 which is the address of POP_BLOCK.
 
 	//ceval.c
 	case SETUP_LOOP:
@@ -109,7 +109,7 @@ After a new block for loop is built, list [1,2,3,4] will be load to the top of e
 		SET_TOP(x);               |     PyObject *res = (*f)(o);
 		continue;                 |     return res; }
         
-In this case, v is the list object we created for [1,2,3,4]. <i>PyTypeObject</i> will be PyList_Type which defines all the methods and attributes for a Python list. Then we get the entrance of get iterator methed by predefined <i>tp_iter</i>. By PyTypeObject's defination, the <i>tp_iter</i> will <i>be list_iter</i> which is the implementation to get list iterator. 
+In this case, v is the list object we created for [1,2,3,4]. <i>PyTypeObject</i> will be PyList_Type which defines all the methods and attributes for a Python list. Then we get the entrance of get iterator method by predefined <i>tp_iter</i>. By PyTypeObject's definition, the <i>tp_iter</i> will <i>be list_iter</i> which is the implementation to get list iterator. 
 
 	//listobject.c
 	PyTypeObject PyList_Type = {
@@ -131,7 +131,7 @@ By hiding the details of the errors checking part and reference count part of th
     	return (PyObject *)it;
 	}
 
-When list iterator is initialized, FOR_ITER will be called to get the item out of the list by the index it held. So 1, 2, 3, 4 will be pushed into execution stack, each time FOR_ITER is called. What will happen by the fifth call? It will failed to get the none existing item, pop the iterotar out and jump to the instruction whose offset is specified by <i>oparg</i>. Here, <i>oparg</i> is 11 and POP_BLOCK will be jumpped to which means the iteration is over.  
+When list iterator is initialized, FOR_ITER will be called to get the item out of the list by the index it held. So 1, 2, 3, 4 will be pushed into execution stack, each time FOR_ITER is called. What will happen by the fifth call? It will failed to get the none existing item, pop the iterator out and jump to the instruction whose offset is specified by <i>oparg</i>. Here, <i>oparg</i> is 11 and POP_BLOCK will be jumped to which means the iteration is over.  
 
 	//ceval.c      
 	//successfully get next item            | // failed to get next item             
@@ -141,7 +141,7 @@ When list iterator is initialized, FOR_ITER will be called to get the item out o
 		PUSH(x);                            | x = v = POP();  JUMPBY(oparg);
 		continue;                           | continue;
 
-The way to get the entrance to the next method of iterators works the same way as getting the entrance of the function which returns the iterator. The next method are implemented in the Python type object and the entrance of the next method can be get by <i>type->tp_iternext</i>. By definiation of <i>PyListIter_Type</i>, <i>tp_iternext</i> methods is implmented as <i>listiter_next()</i> in listobject.c. During the first four runs, <i>it_index</i> in  <i>listiter_next()</i> will be 0,1,2,3 which is smaller than the list size 4. So the item will be got out and index will increase by one. When the fifth call happens, <i>it_index</i> is 4 which does not satifis the condition. So the pointer <i>it_seq</i> which points to list [1,2,3,4] will be set to NULL and NULL will be returned to tell the interpretor the iterator has reached the end.
+The way to get the entrance to the next method of iterators works the same way as getting the entrance of the function which returns the iterator. The next method are implemented in the Python type object and the entrance of the next method can be get by <i>type->tp_iternext</i>. By definiation of <i>PyListIter_Type</i>, <i>tp_iternext</i> methods is implemented as <i>listiter_next()</i> in listobject.c. During the first four runs, <i>it_index</i> in  <i>listiter_next()</i> will be 0,1,2,3 which is smaller than the list size 4. So the item will be got out and index will increase by one. When the fifth call happens, <i>it_index</i> is 4 which does not satisfy the condition. So the pointer <i>it_seq</i> which points to list [1,2,3,4] will be set to NULL and NULL will be returned to tell the interpreter the iterator has reached the end.
 	
 	//listobject.c
 	listiter_next(listiterobject *it)
