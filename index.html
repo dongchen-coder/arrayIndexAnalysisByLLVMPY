@@ -108,7 +108,9 @@ Dong Chen</title>
 
 <h2>Introduction</h2>
 
-<p>Code transformations are widely used in performance concerned optimizations, programming productivity and so on. LLVM infrastructure is often used. But C++ abased interface is hard to be used during the development. Here we use LLVM-py interface to do code transformations.</p>
+<p><big></p>
+
+<p>Code transformations are widely used in performance concerned optimizations, programming productivity and so on. LLVM infrastructure is often used. But C++ abased interface is hard to be used during the development. Here we use LLVM-py interface to do code transformations for GPU race detection.</p>
 
 <h2>Architecture and execution model of GPU</h2>
 
@@ -117,6 +119,8 @@ Dong Chen</title>
 <p>GPU programs contain two parts: the main program and the kernel program. The main program will do initialization, copy data from main memory to device memory, launch kernel program on GPU and copy data back from device memory to main memory once the kernel program finished running. Kernel program will be mapped into thousands of threads. And threads are organized in thread blocks. Thread blocks will be assigned to each SM to execute and threads in the same thread block will be executed on the array of SPs in warps.</p>
 
 <p>So threads in GPU can share data on shared memory and device memory. Data races will occur if synchronization is not correctly used. But current compiler can not detect races.</p>
+
+<p><img src="./4.png" alt="Alt text" /></p>
 
 <h2>GPU Races detection by two-pass run</h2>
 
@@ -127,13 +131,33 @@ Dong Chen</title>
 <h2>Code transfermations needed</h2>
 
 <ol>
-<li><p>inserting instructions and functions.</p></li>
-<li><p>instructions for declaring new variables for copying</p></li>
-<li><p>instructions for copying data to declared variables</p></li>
-<li><p>functions for comparing</p></li>
-<li><p>iterating through AST and replacing variables</p></li>
-<li><p>redirect the access to private copies</p></li>
+<li><p>iterating through AST and replacing variables</p>
+
+<ul>
+<li><p>instructions for declaring new variables</p>
+
+<pre><code>  int a;         ---&gt;     int a[M]
+  int a[N];      ---&gt;     int a[M][N]
+</code></pre></li>
+<li><p>instructions for access redirection</p>
+
+<pre><code>  a              ---&gt;      a[warpID] 
+  a[i]           ---&gt;      a[warpID][i]        
+</code></pre></li>
+</ul>
+</li>
+<li><p>inserting functions to do memory copy, memory compare</p>
+
+<ul>
+<li><pre><code>region_copy();
+union_copy();
+region_diff();
+</code></pre></li>
+</ul>
+</li>
 </ol>
 
+
+<p></big></p>
 </body>
 </html>

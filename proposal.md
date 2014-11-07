@@ -5,8 +5,9 @@ Dong Chen
 
 Introduction
 -----------
+<big>
 
-Code transformations are widely used in performance concerned optimizations, programming productivity and so on. LLVM infrastructure is often used. But C++ abased interface is hard to be used during the development. Here we use LLVM-py interface to do code transformations.
+Code transformations are widely used in performance concerned optimizations, programming productivity and so on. LLVM infrastructure is often used. But C++ abased interface is hard to be used during the development. Here we use LLVM-py interface to do code transformations for GPU race detection.
 
 Architecture and execution model of GPU
 ---------------------------------------
@@ -17,7 +18,7 @@ GPU programs contain two parts: the main program and the kernel program. The mai
 
 So threads in GPU can share data on shared memory and device memory. Data races will occur if synchronization is not correctly used. But current compiler can not detect races.
 
-
+![Alt text](./4.png)
 
 GPU Races detection by two-pass run
 ----------------------------------
@@ -26,17 +27,28 @@ Our approach is to detect GPU races by transforming the kernel program and run i
 
 ![Alt text](./3.png)
 
+
 Code transfermations needed
 ---------------------------
 
-1. inserting instructions and functions.
+1. iterating through AST and replacing variables
 
-  * instructions for declaring new variables for copying
+ 	* instructions for declaring new variables
 
-  * instructions for copying data to declared variables
+			int a;         --->     int a[M]
+			int a[N]; 	   --->     int a[M][N]
 
-  * functions for comparing
+  	* instructions for access redirection
+  	
+  			a              --->      a[warpID] 
+  			a[i]           --->      a[warpID][i]        
 
-2. iterating through AST and replacing variables
+2.  inserting functions to do memory copy, memory compare
+	
+	*	
+	
+			region_copy();
+			union_copy();
+			region_diff();
 
-  * redirect the access to private copies
+</big>
