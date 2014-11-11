@@ -28,7 +28,7 @@ Our approach is to detect GPU races by transforming the kernel program and run i
 ![Alt text](./3.png)
 
 
-Code transfermations needed
+Code transformations needed
 ---------------------------
 
 1. iterating through AST and replacing variables
