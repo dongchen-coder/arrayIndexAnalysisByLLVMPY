@@ -51,6 +51,7 @@ Code transformations needed
 			union_copy();
 			region_diff();
 	
+	Update:
 	llvmpy can be used easily to generate LLVM IR, so inserting LLVM IR code of the functions is a good choice. The orginal C code of region_copy() is listed below:
 		
 		void warp_level_parallel_memcpy( int tid,
