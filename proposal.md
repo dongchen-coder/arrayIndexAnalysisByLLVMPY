@@ -1,4 +1,4 @@
-Proposal for CSC 453: Code transformations for GPU race detection with llvm-py
+CSC 453: Code transformations for GPU race detection with llvm-py
 =======
 
 Dong Chen
@@ -50,5 +50,52 @@ Code transformations needed
 			region_copy();
 			union_copy();
 			region_diff();
+	
+	llvmpy can be used easily to generate LLVM IR, so inserting LLVM IR code of the functions is a good choice. The orginal C code of region_copy() is listed below:
+		
+		void warp_level_parallel_memcpy( int tid,
+                       char * dst, char * src, int size)
+		{
+   			int * opt_dst = (int *) dst ;
+    		int * opt_src = (int *) src ;
+    		int opt_size  = size / sizeof(int) ; // hope size is times of 4.
+
+    		int ttid = tid % WARP_SIZE;
+    		for (int k=0; k< (opt_size / WARP_SIZE)+1; k ++ ) {
+        		int idx = ttid + WARP_SIZE * k ;
+        		if ( idx < opt_size )
+           			opt_dst[idx] = opt_src[idx] ;
+    		}
+    		__syncthreads() ;
+		}
+
+		void region_copy( int block_id, int tid, char * orig_copy, int size,
+                     char * new_copy, char * union_copy)
+		{
+    		warp_level_parallel_memcpy( tid, new_copy, orig_copy, size ) ;
+		}
+
+	Writing the above functions in llvmpy is quite straight forward. The skeleton is listed below:
+		
+	1. define a function type, which gives the types of return value and argments.
+		
+			fnty = Type.function(Type.void(), [intty, intty, charty, intty, charty, charty])	
+	2. define a funtion based on one function type
+		
+			region_copy = Function.new(mod,fnty, name='region_copy')
+	
+	3. define the names of arguments
+		
+			arg0, arg1, arg2, arg3, arg4, arg5 = region_copy.args
+			region_copy.args[0].name = "block_id"
+	
+	4. define basic block in one function and inserting instructions
+			
+			#inserting basic block
+			enblk = region_copy.append_basic_block("entry")
+			#inserting instruction for funciton call
+			bldr.call(warp_level_parallel_memcpy,[load_b, load_e, load_c, load_d])
+
+
 
 </big>

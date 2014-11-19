@@ -95,14 +95,18 @@ sup {
 	}
 }
 </style>
-<title>Proposal for CSC 453: Code transformations for GPU race detection with llvm-py
+<title>CSC 453: Code transformations for GPU race detection with llvm-py
 =======
 
-Dong Chen</title>
+Dong Chen
+
+Introduction
+-----------
+<big</title>
 
 </head>
 <body>
-<h1>Proposal for CSC 453: Code transformations for GPU race detection with llvm-py</h1>
+<h1>CSC 453: Code transformations for GPU race detection with llvm-py</h1>
 
 <p>Dong Chen</p>
 
@@ -154,6 +158,57 @@ union_copy();
 region_diff();
 </code></pre></li>
 </ul>
+
+
+<p>llvmpy can be used easily to generate LLVM IR, so inserting LLVM IR code of the functions is a good choice. The orginal C code of region_copy() is listed below:</p>
+
+<pre><code>void warp_level_parallel_memcpy( int tid,
+               char * dst, char * src, int size)
+{
+    int * opt_dst = (int *) dst ;
+    int * opt_src = (int *) src ;
+    int opt_size  = size / sizeof(int) ; // hope size is times of 4.
+
+    int ttid = tid % WARP_SIZE;
+    for (int k=0; k&lt; (opt_size / WARP_SIZE)+1; k ++ ) {
+        int idx = ttid + WARP_SIZE * k ;
+        if ( idx &lt; opt_size )
+            opt_dst[idx] = opt_src[idx] ;
+    }
+    __syncthreads() ;
+}
+
+void region_copy( int block_id, int tid, char * orig_copy, int size,
+             char * new_copy, char * union_copy)
+{
+    warp_level_parallel_memcpy( tid, new_copy, orig_copy, size ) ;
+}
+</code></pre>
+
+<p>Writing the above functions in llvmpy is quite straight forward. The skeleton is listed below:</p>
+
+<ol>
+<li><p>define a function type, which gives the types of return value and argments.</p>
+
+<pre><code> fnty = Type.function(Type.void(), [intty, intty, charty, intty, charty, charty])    
+</code></pre></li>
+<li><p>define a funtion based on one function type</p>
+
+<pre><code> region_copy = Function.new(mod,fnty, name='region_copy')
+</code></pre></li>
+<li><p>define the names of arguments</p>
+
+<pre><code> arg0, arg1, arg2, arg3, arg4, arg5 = region_copy.args
+ region_copy.args[0].name = "block_id"
+</code></pre></li>
+<li><p>define basic block in one function and inserting instructions</p>
+
+<pre><code> #inserting basic block
+ enblk = region_copy.append_basic_block("entry")
+ #inserting instruction for funciton call
+ bldr.call(warp_level_parallel_memcpy,[load_b, load_e, load_c, load_d])
+</code></pre></li>
+</ol>
 </li>
 </ol>
 
