@@ -123,13 +123,18 @@ The skeleton is listed below.
 
 What can be done for now(easiest):
 
-All the functions which will be used in the GPU Race detection can be generated. The llvmpy code is in   
+All the functions which will be used in the GPU Race detection can be generated. 
 
+The llvmpy code is listed in 
+<a>https://github.com/dongchen-coder/dongchen-coder.github.io/blob/master/gpuRaceDetection.py</a>. 
+The generated code is listed in <a>https://github.com/dongchen-coder/dongchen-coder.github.io/blob/master/gpuRaceDetection.ll</a>
 
 What should be done next(sort from easy to hard):
 
 1. Find the way to analysis the code, which means find whether there is way to iterating over the code.
 2. Find the way to insert instructions, such as function calls, new variables, and so on.
 3. Find the way to replace variables in the origrinal instructions.
+
+But for now, whether llvmpy supports analysis is still need to be explored. Pass manager part of llvmpy should be further checked.
 
 </big>

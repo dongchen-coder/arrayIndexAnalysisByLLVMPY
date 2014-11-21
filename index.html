@@ -95,24 +95,24 @@ sup {
 	}
 }
 </style>
-<title>CSC 453: Code transformations for GPU race detection with llvm-py
+<title><big>
+
+CSC 453: Code transformations for GPU race detection with llvm-py
 =======
 
 Dong Chen
 
-Introduction
------------
-<big</title>
+Introduction</title>
 
 </head>
 <body>
+<p><big></p>
+
 <h1>CSC 453: Code transformations for GPU race detection with llvm-py</h1>
 
 <p>Dong Chen</p>
 
 <h2>Introduction</h2>
-
-<p><big></p>
 
 <p>Code transformations are widely used in performance concerned optimizations, programming productivity and so on. LLVM infrastructure is often used. But C++ abased interface is hard to be used during the development. Here we use LLVM-py interface to do code transformations for GPU race detection.</p>
 
@@ -153,65 +153,103 @@ Introduction
 <li><p>inserting functions to do memory copy, memory compare</p>
 
 <ul>
-<li><pre><code>region_copy();
-union_copy();
-region_diff();
+<li><pre><code>  region_copy();
+  union_copy();
+  region_diff();
 </code></pre></li>
 </ul>
+</li>
+</ol>
 
 
-<p>llvmpy can be used easily to generate LLVM IR, so inserting LLVM IR code of the functions is a good choice. The orginal C code of region_copy() is listed below:</p>
+<h2>Update Post 1</h2>
 
-<pre><code>void warp_level_parallel_memcpy( int tid,
-               char * dst, char * src, int size)
-{
-    int * opt_dst = (int *) dst ;
-    int * opt_src = (int *) src ;
-    int opt_size  = size / sizeof(int) ; // hope size is times of 4.
+<p>llvmpy can be easily used to generate LLVM IR code, so inserting LLVM IR code of the functions is a good choice. The first step is to generate the funcitons which will be called by kernels for race detection. Let's take <i>region_copy()</i> as an example, the orginal C code of <i>region_copy()</i> is listed below, it will copy the data from <i>orig_src</i> to <i>new_copy</i> in parallel:</p>
 
-    int ttid = tid % WARP_SIZE;
-    for (int k=0; k&lt; (opt_size / WARP_SIZE)+1; k ++ ) {
-        int idx = ttid + WARP_SIZE * k ;
-        if ( idx &lt; opt_size )
-            opt_dst[idx] = opt_src[idx] ;
+<pre><code>    void warp_level_parallel_memcpy( int tid,
+                   char * dst, char * src, int size)
+    {
+        int * opt_dst = (int *) dst ;
+        int * opt_src = (int *) src ;
+        int opt_size  = size / sizeof(int) ;
+
+        int ttid = tid % WARP_SIZE;
+        for (int k=0; k&lt; (opt_size / WARP_SIZE)+1; k ++ ) {
+            int idx = ttid + WARP_SIZE * k ;
+            if ( idx &lt; opt_size )
+                opt_dst[idx] = opt_src[idx] ;
+        }
+        __syncthreads() ;
     }
-    __syncthreads() ;
-}
 
-void region_copy( int block_id, int tid, char * orig_copy, int size,
-             char * new_copy, char * union_copy)
-{
-    warp_level_parallel_memcpy( tid, new_copy, orig_copy, size ) ;
-}
+    void region_copy( int block_id, int tid, char * orig_copy, int size,
+                 char * new_copy, char * union_copy)
+    {
+        warp_level_parallel_memcpy( tid, new_copy, orig_copy, size ) ;
+    }
 </code></pre>
 
-<p>Writing the above functions in llvmpy is quite straight forward. The skeleton is listed below:</p>
+<p>Writing the above functions in llvmpy is quite straight forward, but should be in the form of LLVM IR. In LLVM IR, functions are contained in modules. Each function should contain at least one "entry" basic block. The instructions are inserted to each basic block of the function in order.</p>
+
+<p>The skeleton is listed below.</p>
 
 <ol>
-<li><p>define a function type, which gives the types of return value and argments.</p>
+<li><p>Define data types and function types. llvmpy provides Type object to define the data types and function types.</p>
 
-<pre><code> fnty = Type.function(Type.void(), [intty, intty, charty, intty, charty, charty])    
-</code></pre></li>
-<li><p>define a funtion based on one function type</p>
+<pre><code> #define "int" type
+ intty = Type.int(32)
 
-<pre><code> region_copy = Function.new(mod,fnty, name='region_copy')
+ #define "char *" type 
+ charty = Type.pointer(Type.int(8))
+
+ #define function type which is "void FUNCTION(int, int, char *, int, char *, char *)"
+ fnty = Type.function(Type.void(), [intty, intty, charty, intty, charty, charty])
 </code></pre></li>
-<li><p>define the names of arguments</p>
+<li><p>Define a funtion based on one function type</p>
+
+<pre><code> region_copy = Function.new(mod, fnty, name='region_copy')
+</code></pre></li>
+<li><p>Setting the arguments. In llvmpy, the argments of one funcion can be return just by assignment. And the attributes of each argment can be esaily modified.</p>
 
 <pre><code> arg0, arg1, arg2, arg3, arg4, arg5 = region_copy.args
  region_copy.args[0].name = "block_id"
 </code></pre></li>
-<li><p>define basic block in one function and inserting instructions</p>
+<li><p>Define basic block in one function and inserting instructions</p>
 
 <pre><code> #inserting basic block
  enblk = region_copy.append_basic_block("entry")
+
+ #inserting instructions
+ a = bldr.alloca(intty)    # %0 = alloca i32, align 4
+ a.alignment = 4
+ a_store = bldr.store(arg0, a) # store i32 %block_id, i32* %0
+
  #inserting instruction for funciton call
  bldr.call(warp_level_parallel_memcpy,[load_b, load_e, load_c, load_d])
 </code></pre></li>
 </ol>
-</li>
+
+
+<p><b>Summary:</b></p>
+
+<p>What can be done for now(easiest):</p>
+
+<p>All the functions which will be used in the GPU Race detection can be generated.</p>
+
+<p>The llvmpy code is listed in
+<a>https://github.com/dongchen-coder/dongchen-coder.github.io/blob/master/gpuRaceDetection.py</a>.
+The generated code is listed in <a>https://github.com/dongchen-coder/dongchen-coder.github.io/blob/master/gpuRaceDetection.ll</a></p>
+
+<p>What should be done next(sort from easy to hard):</p>
+
+<ol>
+<li>Find the way to analysis the code, which means find whether there is way to iterating over the code.</li>
+<li>Find the way to insert instructions, such as function calls, new variables, and so on.</li>
+<li>Find the way to replace variables in the origrinal instructions.</li>
 </ol>
 
+
+<p>But for now, whether llvmpy supports analysis is still need to be explored. Pass manager part of llvmpy should be further checked.</p>
 
 <p></big></p>
 </body>
