@@ -1,3 +1,5 @@
+<big>
+
 CSC 453: Code transformations for GPU race detection with llvm-py
 =======
 
@@ -5,7 +7,7 @@ Dong Chen
 
 Introduction
 -----------
-<big>
+
 
 Code transformations are widely used in performance concerned optimizations, programming productivity and so on. LLVM infrastructure is often used. But C++ abased interface is hard to be used during the development. Here we use LLVM-py interface to do code transformations for GPU race detection.
 
@@ -45,21 +47,24 @@ Code transformations needed
 
 2.  inserting functions to do memory copy, memory compare
 	
-	*	
+	* 
 	
 			region_copy();
 			union_copy();
 			region_diff();
-	
-	Update:
-	llvmpy can be used easily to generate LLVM IR, so inserting LLVM IR code of the functions is a good choice. The orginal C code of region_copy() is listed below:
+
+
+Update Post 1
+------------
+
+llvmpy can be easily used to generate LLVM IR code, so inserting LLVM IR code of the functions is a good choice. The first step is to generate the funcitons which will be called by kernels for race detection. Let's take <i>region_copy()</i> as an example, the orginal C code of <i>region_copy()</i> is listed below, it will copy the data from <i>orig_src</i> to <i>new_copy</i> in parallel:
 		
 		void warp_level_parallel_memcpy( int tid,
                        char * dst, char * src, int size)
 		{
    			int * opt_dst = (int *) dst ;
     		int * opt_src = (int *) src ;
-    		int opt_size  = size / sizeof(int) ; // hope size is times of 4.
+    		int opt_size  = size / sizeof(int) ;
 
     		int ttid = tid % WARP_SIZE;
     		for (int k=0; k< (opt_size / WARP_SIZE)+1; k ++ ) {
@@ -76,27 +81,55 @@ Code transformations needed
     		warp_level_parallel_memcpy( tid, new_copy, orig_copy, size ) ;
 		}
 
-	Writing the above functions in llvmpy is quite straight forward. The skeleton is listed below:
+Writing the above functions in llvmpy is quite straight forward, but should be in the form of LLVM IR. In LLVM IR, functions are contained in modules. Each function should contain at least one "entry" basic block. The instructions are inserted to each basic block of the function in order.
+
+The skeleton is listed below. 
+
+1. Define data types and function types. llvmpy provides Type object to define the data types and function types. 
 		
-	1. define a function type, which gives the types of return value and argments.
+		#define "int" type
+		intty = Type.int(32)
 		
-			fnty = Type.function(Type.void(), [intty, intty, charty, intty, charty, charty])	
-	2. define a funtion based on one function type
+		#define "char *" type 
+		charty = Type.pointer(Type.int(8))
 		
-			region_copy = Function.new(mod,fnty, name='region_copy')
-	
-	3. define the names of arguments
-		
-			arg0, arg1, arg2, arg3, arg4, arg5 = region_copy.args
-			region_copy.args[0].name = "block_id"
-	
-	4. define basic block in one function and inserting instructions
+		#define function type which is "void FUNCTION(int, int, char *, int, char *, char *)"
+		fnty = Type.function(Type.void(), [intty, intty, charty, intty, charty, charty])
 			
-			#inserting basic block
-			enblk = region_copy.append_basic_block("entry")
-			#inserting instruction for funciton call
-			bldr.call(warp_level_parallel_memcpy,[load_b, load_e, load_c, load_d])
+3. Define a funtion based on one function type
+		
+		region_copy = Function.new(mod, fnty, name='region_copy')
+	
+4. Setting the arguments. In llvmpy, the argments of one funcion can be return just by assignment. And the attributes of each argment can be esaily modified.
+		
+	
+		arg0, arg1, arg2, arg3, arg4, arg5 = region_copy.args
+		region_copy.args[0].name = "block_id"
+	
+5. Define basic block in one function and inserting instructions
+			
+		#inserting basic block
+		enblk = region_copy.append_basic_block("entry")
+		
+		#inserting instructions
+		a = bldr.alloca(intty)    # %0 = alloca i32, align 4
+		a.alignment = 4
+		a_store = bldr.store(arg0, a) # store i32 %block_id, i32* %0
+		
+		#inserting instruction for funciton call
+		bldr.call(warp_level_parallel_memcpy,[load_b, load_e, load_c, load_d])
+
+<b>Summary:</b>
+
+What can be done for now(easiest):
+
+All the functions which will be used in the GPU Race detection can be generated. The llvmpy code is in   
 
 
+What should be done next(sort from easy to hard):
+
+1. Find the way to analysis the code, which means find whether there is way to iterating over the code.
+2. Find the way to insert instructions, such as function calls, new variables, and so on.
+3. Find the way to replace variables in the origrinal instructions.
 
 </big>
