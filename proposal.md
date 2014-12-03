@@ -144,7 +144,7 @@ Update Post 2 (Outline)
         		for istr in bb.instructions:
             		for operand in istr.operands:
          
-2. build compiler yourself (<a https://github.com/dongchen-coder/dongchen-coder.github.io/blob/master/kaleidoscope.py">kaleidoscope</a>)
+2. build compiler yourself (<a href="https://github.com/dongchen-coder/dongchen-coder.github.io/blob/master/kaleidoscope.py">kaleidoscope</a>)
 
 		tokenizer
 		lexer
