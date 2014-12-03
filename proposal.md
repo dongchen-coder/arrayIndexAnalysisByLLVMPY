@@ -144,11 +144,11 @@ Update Post 2 (Outline)
         		for istr in bb.instructions:
             		for operand in istr.operands:
          
-2. build compiler yourself 
+2. build compiler yourself (<a https://github.com/dongchen-coder/dongchen-coder.github.io/blob/master/kaleidoscope.py">kaleidoscope</a>)
 
 		tokenizer
 		lexer
-		paser (AST can be generated here and )
+		paser (AST can be generated here)
 		code generator
 
 Result:
