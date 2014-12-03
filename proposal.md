@@ -134,4 +134,26 @@ What should be done next(sort from easy to hard):
 
 But for now, whether llvmpy supports analysis is still need to be explored. Pass manager part of llvmpy should be further checked.
 
+Update Post 2 (Draft)
+------------
+
+1. iterating over code (LLVM IR), LLVM IR level analysis can be performed
+	
+		for f in mod.functions:
+    		for bb in f.basic_blocks:
+        		for istr in bb.instructions:
+            		for operand in istr.operands:
+         
+2. build compiler yourself 
+
+		tokenizer
+		lexer
+		paser (AST can be generated here and )
+		code generator
+
+Result:
+	
+Array access analysis of GPU kernel program:
+	
+
 </big>
