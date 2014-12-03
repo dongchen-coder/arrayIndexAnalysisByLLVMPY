@@ -134,7 +134,7 @@ What should be done next(sort from easy to hard):
 
 But for now, whether llvmpy supports analysis is still need to be explored. Pass manager part of llvmpy should be further checked.
 
-Update Post 2 (Draft)
+Update Post 2 (Outline)
 ------------
 
 1. iterating over code (LLVM IR), LLVM IR level analysis can be performed
