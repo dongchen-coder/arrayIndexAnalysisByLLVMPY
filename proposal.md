@@ -153,7 +153,21 @@ Update Post 2 (Outline)
 
 Result:
 	
-Array access analysis of GPU kernel program:
+Array access analysis (<a href="https://github.com/dongchen-coder/dongchen-coder.github.io/blob/master/arrayAccessAnalysis.py">source code</a>) of GPU kernel program:
+
+GPU kernel program of matrix multiply (<a href="https://github.com/dongchen-coder/dongchen-coder.github.io/blob/master/matrixMul.c">C</a>, <a href="https://github.com/dongchen-coder/dongchen-coder.github.io/blob/master/matrixMul.ll">LLVM IR</a>) 
+
+results:
+
+	Array aacess analysis result:
+	A = a + wA * ty + tx
+	B = b + wB * ty + tx
+	C = wB * 32 * by + 32 * bx + wB * ty + tx
+
+
+	
+	
+	
 	
 
 </big>

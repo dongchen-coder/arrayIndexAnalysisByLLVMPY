@@ -270,7 +270,17 @@ The generated code is listed <a href="https://github.com/dongchen-coder/dongchen
 
 <p>Result:</p>
 
-<p>Array access analysis of GPU kernel program:</p>
+<p>Array access analysis (<a href="https://github.com/dongchen-coder/dongchen-coder.github.io/blob/master/arrayAccessAnalysis.py">source code</a>) of GPU kernel program:</p>
+
+<p>GPU kernel program of matrix multiply (<a href="https://github.com/dongchen-coder/dongchen-coder.github.io/blob/master/matrixMul.c">C</a>, <a href="https://github.com/dongchen-coder/dongchen-coder.github.io/blob/master/matrixMul.ll">LLVM IR</a>)</p>
+
+<p>results:</p>
+
+<pre><code>Array aacess analysis result:
+A = a + wA * ty + tx
+B = b + wB * ty + tx
+C = wB * 32 * by + 32 * bx + wB * ty + tx
+</code></pre>
 
 <p></big></p>
 </body>
