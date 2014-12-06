@@ -192,19 +192,12 @@ Array aacess analysis result:
 
 With knowledge of a and b are induction variables and following the following rules:
 
-	a = ( wA * 32 * by : 32 : wA * 32 * by + wA - 1 )
-	b = ( 32 * bx : 32 * wB : 32 * bx + wB - 1 )
-	tx = ( 0 : 1 : 31)
-	ty = ( 0 : 1 : 31)
+	a = ( wA * 32 * by : 32 : wA * 32 * by + wA - 1 ) (additional induction variable analysis)
+	b = ( 32 * bx : 32 * wB : 32 * bx + wB - 1 ) (additional induction variable analysis) 
+	tx = ( 0 : 1 : 31) (runtime)
+	ty = ( 0 : 1 : 31) (runtime)
 	
 Exact access range by threads block can be calculated with its IDs (bx, by).
-
-	
-
-
 	
 	
-	
-	
-
 </big>
