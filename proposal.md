@@ -134,35 +134,70 @@ What should be done next(sort from easy to hard):
 
 But for now, whether llvmpy supports analysis is still need to be explored. Pass manager part of llvmpy should be further checked.
 
-Update Post 2 (Outline)
+Update Post 2
 ------------
 
-1. iterating over code (LLVM IR), LLVM IR level analysis can be performed
-	
+Answering previous questions:
+
+1. Find the way to analysis the code, which means find whether there is way to iterating over the code.
+
+	llvmpy provides a very convenient way to analysis the LLVM IR code, so LLVM IR level analysis can be easily performed.
+
 		for f in mod.functions:
     		for bb in f.basic_blocks:
         		for istr in bb.instructions:
             		for operand in istr.operands:
-         
-2. build compiler yourself (<a href="https://github.com/dongchen-coder/dongchen-coder.github.io/blob/master/kaleidoscope.py">kaleidoscope</a>)
 
-		tokenizer
-		lexer
-		paser (AST can be generated here)
-		code generator
+2.  Find the way to insert instructions, such as function calls, new variables, and so on.
 
-Result:
+	llvmpy provides a set of API which can modify LLVM IR: inserting functions to mudule, inserting basic blocks to functions, inserting instructions to basic blocks.
+	
+		#add function fo module
+			module.add_function() 
+		#insert basic block before the current basic block
+			basic_block.insert_before() 
+		#insert 'add' instruction before instruction 'cinst'
+			Builder.position_before(cinst)
+			Builder.add()		
+
+3. Find the way to replace variables in instructions.
+
+	llvmpy provides an API to delete instructions from basic block, which can be replaced by a new instruction
+
+		#delete instructions form basic block
+		instruction.erase_from_parent()
+
+But all the analysis and code transformation are performed in LLVM IR level, which is not convenient for source to source code transformation which is easier to be performed in AST level.	Python is a very good choice to implement the whole compiler, we can write a CUDA compiler to get the AST of CUDA program. (<a href="https://github.com/dongchen-coder/dongchen-coder.github.io/blob/master/kaleidoscope.py">kaleidoscope</a>) provides a good example and reference.
+
+		1.tokenizer
+		2.lexer
+		3.paser (AST can be generated here)	
+		4.code generator
+
+What job is LLVMPY suitable to do:
 	
 Array access analysis (<a href="https://github.com/dongchen-coder/dongchen-coder.github.io/blob/master/arrayAccessAnalysis.py">source code</a>) of GPU kernel program:
 
+GPU kernel program will be mapped into thousands of threads. threads are grouped into thread blocks. The execution model requires that each thread blocks should be independent. That is to say there should be no data dependence. Without data dependence, thread blocks can be assigned to different GPUs and be executed by multiple GPUs at the same time. The speedup is almost linear. And with the knowledge of the exact array access range of each thread blocks, the assginment can be done automatically.
+
+Matrix multiply for example:
+
 GPU kernel program of matrix multiply (<a href="https://github.com/dongchen-coder/dongchen-coder.github.io/blob/master/matrixMul.c">C</a>, <a href="https://github.com/dongchen-coder/dongchen-coder.github.io/blob/master/matrixMul.ll">LLVM IR</a>) 
 
-results:
+Array aacess analysis result:
 
-	Array aacess analysis result:
 	A = a + wA * ty + tx
 	B = b + wB * ty + tx
 	C = wB * 32 * by + 32 * bx + wB * ty + tx
+
+With knowledge of a and b are induction variables and following the following rules:
+
+	a = ( wA * 32 * by : 32 : wA * 32 * by + wA - 1 )
+	b = ( 32 * bx : 32 * wB : 32 * bx + wB - 1 )
+	
+Exact range can be calculated with the thread ID or thread block ID.
+
+	
 
 
 	

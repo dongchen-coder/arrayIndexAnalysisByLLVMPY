@@ -248,39 +248,74 @@ The generated code is listed <a href="https://github.com/dongchen-coder/dongchen
 
 <p>But for now, whether llvmpy supports analysis is still need to be explored. Pass manager part of llvmpy should be further checked.</p>
 
-<h2>Update Post 2 (Outline)</h2>
+<h2>Update Post 2</h2>
+
+<p>Answering previous questions:</p>
 
 <ol>
-<li><p>iterating over code (LLVM IR), LLVM IR level analysis can be performed</p>
+<li><p>Find the way to analysis the code, which means find whether there is way to iterating over the code.</p>
+
+<p> llvmpy provides a very convenient way to analysis the LLVM IR code, so LLVM IR level analysis can be easily performed.</p>
 
 <pre><code> for f in mod.functions:
      for bb in f.basic_blocks:
          for istr in bb.instructions:
              for operand in istr.operands:
 </code></pre></li>
-<li><p>build compiler yourself (<a href="https://github.com/dongchen-coder/dongchen-coder.github.io/blob/master/kaleidoscope.py">kaleidoscope</a>)</p>
+<li><p>Find the way to insert instructions, such as function calls, new variables, and so on.</p>
 
-<pre><code> tokenizer
- lexer
- paser (AST can be generated here)
- code generator
+<p>llvmpy provides a set of API which can modify LLVM IR: inserting functions to mudule, inserting basic blocks to functions, inserting instructions to basic blocks.</p>
+
+<pre><code>#add function fo module
+    module.add_function() 
+#insert basic block before the current basic block
+    basic_block.insert_before() 
+#insert 'add' instruction before instruction 'cinst'
+    Builder.position_before(cinst)
+    Builder.add()       
+</code></pre></li>
+<li><p>Find the way to replace variables in instructions.</p>
+
+<p> llvmpy provides an API to delete instructions from basic block, which can be replaced by a new instruction</p>
+
+<pre><code> #delete instructions form basic block
+ instruction.erase_from_parent()
 </code></pre></li>
 </ol>
 
 
-<p>Result:</p>
+<p>But all the analysis and code transformation are performed in LLVM IR level, which is not convenient for source to source code transformation which is easier to be performed in AST level. Python is a very good choice to implement the whole compiler, we can write a CUDA compiler to get the AST of CUDA program. (<a href="https://github.com/dongchen-coder/dongchen-coder.github.io/blob/master/kaleidoscope.py">kaleidoscope</a>) provides a good example and reference.</p>
+
+<pre><code>    1.tokenizer
+    2.lexer
+    3.paser (AST can be generated here) 
+    4.code generator
+</code></pre>
+
+<p>What job is LLVMPY suitable to do:</p>
 
 <p>Array access analysis (<a href="https://github.com/dongchen-coder/dongchen-coder.github.io/blob/master/arrayAccessAnalysis.py">source code</a>) of GPU kernel program:</p>
 
+<p>GPU kernel program will be mapped into thousands of threads. threads are grouped into thread blocks. The execution model requires that each thread blocks should be independent. That is to say there should be no data dependence. Without data dependence, thread blocks can be assigned to different GPUs and be executed by multiple GPUs at the same time. The speedup is almost linear. And with the knowledge of the exact array access range of each thread blocks, the assginment can be done automatically.</p>
+
+<p>Matrix multiply for example:</p>
+
 <p>GPU kernel program of matrix multiply (<a href="https://github.com/dongchen-coder/dongchen-coder.github.io/blob/master/matrixMul.c">C</a>, <a href="https://github.com/dongchen-coder/dongchen-coder.github.io/blob/master/matrixMul.ll">LLVM IR</a>)</p>
 
-<p>results:</p>
+<p>Array aacess analysis result:</p>
 
-<pre><code>Array aacess analysis result:
-A = a + wA * ty + tx
+<pre><code>A = a + wA * ty + tx
 B = b + wB * ty + tx
 C = wB * 32 * by + 32 * bx + wB * ty + tx
 </code></pre>
+
+<p>With knowledge of a and b are induction variables and following the following rules:</p>
+
+<pre><code>a = ( wA * 32 * by : 32 : wA * 32 * by + wA - 1 )
+b = ( 32 * bx : 32 * wB : 32 * bx + wB - 1 )
+</code></pre>
+
+<p>Exact range can be calculated with the thread ID or thread block ID.</p>
 
 <p></big></p>
 </body>
