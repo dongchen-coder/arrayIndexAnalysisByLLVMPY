@@ -194,8 +194,10 @@ With knowledge of a and b are induction variables and following the following ru
 
 	a = ( wA * 32 * by : 32 : wA * 32 * by + wA - 1 )
 	b = ( 32 * bx : 32 * wB : 32 * bx + wB - 1 )
+	tx = ( 0 : 1 : 31)
+	ty = ( 0 : 1 : 31)
 	
-Exact range can be calculated with the thread ID or thread block ID.
+Exact access range by threads block can be calculated with its IDs (bx, by).
 
 	
 
