@@ -198,6 +198,7 @@ With knowledge of a and b are induction variables and following the following ru
 	ty = ( 0 : 1 : 31) (runtime)
 	
 Exact access range by threads block can be calculated with its IDs (bx, by).
-	
+
+presentation (PPT)
 	
 </big>
