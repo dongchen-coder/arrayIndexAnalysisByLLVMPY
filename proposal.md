@@ -199,6 +199,6 @@ With knowledge of a and b are induction variables and following the following ru
 	
 Exact access range by threads block can be calculated with its IDs (bx, by).
 
-presentation (PPT)
-	
+<a href="https://github.com/dongchen-coder/dongchen-coder.github.io/blob/master/final_report.pdf">presentation (PPT)</a>
+
 </big>
