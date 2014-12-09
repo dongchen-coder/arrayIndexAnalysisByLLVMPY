@@ -219,14 +219,44 @@ The impementation of array access analysis contains three parts: array index ana
 
 array index analysis: (<a href="https://github.com/dongchen-coder/dongchen-coder.github.io/blob/master/arrayAccessAnalysis.py">source code</a>)
 	
-* locating array access instruction ‘getelementptr’* construct prefix expression by define-use chains
+* locating array access instruction ‘getelementptr’
+	
+		%113 = getelementptr inbounds float* %112, i64 %111
+	* construct prefix expression by define-use chains
+		#define-use chains
+		%111 = sext i32 %110 to i64
+		%110 = add nsw i32 %108, %109
+		%108 = add nsw i32 %104, %107		%109 = load i32* %tx, align 4		%104 = load i32* %c, align 4		%107 = mul nsw i32 %105, %106		%105 = load i32* %5, align 4
+        %106 = load i32* %ty, align 4
+        
+        #prefix expression
+        add add tx c mul %5 ty	
 * construct infix expresion from prefix expression
 
-induction variables analysis:
+		#prefix expression
+        add add tx c mul %5 ty
+        # step 1
+        add add tx c %5*ty
+        # step 2
+        add c+%5*ty tx
+        # step 3
+        c+%5*ty+tx
 
-* locating store to induction variable instructions* construct expression
+induction variables analysis: (<a href="https://github.com/dongchen-coder/dongchen-coder.github.io/blob/master/inductionVariableAnalysis.py">source code</a>)
 
-constrains analysis:
+* locating store to induction variable instructions
+
+		#induction variable %a
+		store i32 %22, i32* %a, align 4
+
+* construct expression
+
+		#define use chain
+		%22 = load i32* %aBegin, align 4
+		#expression
+		%a = %aBegin
+
+constrains analysis: (<a href="https://github.com/dongchen-coder/dongchen-coder.github.io/blob/master/constrainAnalysis.py">source code</a>)
 
 * locating the basic blocks contain array access* construct Execution Path Tree from control flow graph* extract branch conditions to constrains
 
