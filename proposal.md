@@ -1,4 +1,5 @@
 <big>
+Post 1
 
 CSC 453: Code transformations for GPU race detection with llvm-py
 =======
@@ -54,7 +55,7 @@ Code transformations needed
 			region_diff();
 
 
-Update Post 1
+Update Post 2
 ------------
 
 llvmpy can be easily used to generate LLVM IR code, so inserting LLVM IR code of the functions is a good choice. The first step is to generate the functions which will be called by kernels for race detection. Let's take <i>region_copy()</i> as an example, the original C code of <i>region_copy()</i> is listed below, it will copy the data from <i>orig_src</i> to <i>new_copy</i> in parallel:
@@ -134,7 +135,7 @@ What should be done next(sort from easy to hard):
 
 But for now, whether llvmpy supports analysis is still need to be explored. Pass manager part of llvmpy should be further checked.
 
-Update Post 2
+Update Post 3
 ------------
 
 Answering previous questions:
@@ -167,7 +168,9 @@ Answering previous questions:
 		#delete instructions form basic block
 		instruction.erase_from_parent()
 
-But all the analysis and code transformation are performed in LLVM IR level, which is not convenient for source to source code transformation which is easier to be performed in AST level.	Python is a very good choice to implement the whole compiler, we can write a CUDA compiler to get the AST of CUDA program. (<a href="https://github.com/dongchen-coder/dongchen-coder.github.io/blob/master/kaleidoscope.py">kaleidoscope</a>) provides a good example and reference.
+<b>Summary</b>
+
+But all the analysis and code transformation are performed in LLVM IR level, which is not convenient for source to source code transformation which is easier to be performed in AST level.	Python is a very good choice to implement the whole compiler, we can write a CUDA compiler to get the AST of CUDA program. (<a href="https://github.com/dongchen-coder/dongchen-coder.github.io/blob/master/kaleidoscope.py">kaleidoscope</a>) provides a good example and reference. We can implement the following part one by one and generate AST ourself.
 
 		1.tokenizer
 		2.lexer
@@ -175,16 +178,65 @@ But all the analysis and code transformation are performed in LLVM IR level, whi
 		4.code generator
 
 What job is LLVMPY suitable to do:
+----------------
 	
-Array access analysis (<a href="https://github.com/dongchen-coder/dongchen-coder.github.io/blob/master/arrayAccessAnalysis.py">source code</a>) of GPU kernel program:
+<b>Array Access Analysis of GPU kernel program:</b>
 
-GPU kernel program will be mapped into thousands of threads. threads are grouped into thread blocks. The execution model requires that each thread blocks should be independent. That is to say there should be no data dependence. Without data dependence, thread blocks can be assigned to different GPUs and be executed by multiple GPUs at the same time. The speedup is almost linear. And with the knowledge of the exact array access range of each thread blocks, the assginment can be done automatically.
+<b><i>Why to perform Array Access Analysis?</i></b>
 
-Matrix multiply for example:
+During execution, GPU kernel program will be mapped into thousands of threads. threads are grouped into thread blocks. The execution model requires that each thread blocks should be independent. That is to say there should be no data dependence. Without data dependence, thread blocks can be assigned to different GPUs and be executed by multiple GPUs at the same time. The speedup is almost linear. And with the knowledge of the exact array access range of each thread blocks, the assginment can be done automatically without explicit memory copy (host_to_device and device_to_host).
+
+<b><i>Why program by LLVMPY is easier than using the origianl APIs?</i></b>
+
+Compare the coding segments with same functionality between LLVM API and LLVMPY. LLVMPY has three advantages expecially when the application has a lot of codes:
+	
+1. Do not need to specify which iterator to use
+2. No template functions which have to specify the type
+3. No pointers
+
+This makes implementation in LLVMPY much easier than in C++ LLVM API
+
+```
+// Original C++ LLVM API
+for (Function::iterator b = F.begin(), be = F.end(); b != be; ++b) {
+        for (BasicBlock::iterator i = b->begin(), ie = b->end(); i != ie; ++i) {
+          if (CallInst* callInst = dyn_cast<CallInst>(&*i)) {
+                       if (callInst->getCalledFunction() == targetFunc)
+              ++callCounter;
+          }
+        }
+      }
+```
+```
+# llvmpy
+for bb in f.basic_blocks:	for istr in bb.instructions:		if istr.opcode == OPCODE_CALL:			if its.operands[0] == targetFunc:
+				callCounter=callCounter+1	
+```
+
+<b><i>Implementation:</i></b>
+
+The impementation of array access analysis contains three parts: array index analysis, induction variables analysis and constains analysis.
+
+array index analysis: (<a href="https://github.com/dongchen-coder/dongchen-coder.github.io/blob/master/arrayAccessAnalysis.py">source code</a>)
+	
+* locating array access instruction ‘getelementptr’* construct prefix expression by define-use chains
+* construct infix expresion from prefix expression
+
+induction variables analysis:
+
+* locating store to induction variable instructions* construct expression
+
+constrains analysis:
+
+* locating the basic blocks contain array access* construct Execution Path Tree from control flow graph* extract branch conditions to constrains
+
+
+
+<b><i>Test: Matrix multiply</b></i>
 
 GPU kernel program of matrix multiply (<a href="https://github.com/dongchen-coder/dongchen-coder.github.io/blob/master/matrixMul.c">C</a>, <a href="https://github.com/dongchen-coder/dongchen-coder.github.io/blob/master/matrixMul.ll">LLVM IR</a>) 
 
-Array aacess analysis result:
+Array index analysis result:
 
 	A = a + wA * ty + tx
 	B = b + wB * ty + tx
