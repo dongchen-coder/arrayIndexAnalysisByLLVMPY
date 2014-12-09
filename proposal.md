@@ -258,9 +258,38 @@ induction variables analysis: (<a href="https://github.com/dongchen-coder/dongch
 
 constrains analysis: (<a href="https://github.com/dongchen-coder/dongchen-coder.github.io/blob/master/constrainAnalysis.py">source code</a>)
 
-* locating the basic blocks contain array access* construct Execution Path Tree from control flow graph* extract branch conditions to constrains
+* locating the basic blocks contain array access
 
+		basic block 8
+			%113 = getelementptr inbounds float* %112, i64 %111
+			
+* construct Execution Path Tree from control flow graph
+	
+		#Control flow graph (basic block 0~8)
+		  
+		   /--<----<-----<---\
+	       |     /-<-<-\	 |
+		   |     |     |     |
+		0->1->2->3->4->5->6->7->8
+		   |     |        |     |  
+		   |     \->---->-/     |
+		   \-->---->----->---->-/
+		   
+		#Execution path tree
+		Start From Basic Block 0 : [[0]]		Start From Basic Block 1 : [[1, 0], [1, 7, 6, 3, 2, 1], [1, 7, 6, 3, 5, 4, 3]]		Start From Basic Block 2 : [[2, 1, 0], [2, 1, 7, 6, 3, 2], [2, 1, 7, 6, 3, 2, 5, 4, 3]]		Start From Basic Block 3 : [[3, 5, 4, 3], [3, 2, 1, 0], [3, 2, 1, 7, 6, 3]]		Start From Basic Block 4 : [[4, 3, 5, 4], [4, 3, 2, 1, 0], [4, 3, 2, 1, 7, 6, 3]]		Start From Basic Block 5 : [[5, 4, 3, 5], [5, 4, 3, 2, 1, 0], [5, 4, 3, 2, 1, 7, 6, 3]]		Start From Basic Block 6 : [[6, 3, 5, 4, 3], [6, 3, 2, 1, 0], [6, 3, 2, 1, 7, 6]]		Start From Basic Block 7 : [[7, 6, 3, 2, 1, 7], [7, 6, 3, 5, 4, 3], [7, 6, 3, 2, 1, 0]]		Start From Basic Block 8 : [[8, 1, 0], [8, 1, 7, 6, 3, 2, 1], [8, 1, 7, 6, 3, 5, 4, 3]]
 
+* extract branch conditions to constrains
+
+		#branch in Execution path [8,1,0]
+		br i1 %27, label %28, label %95
+		
+		#branch condition %27
+		%25 = load i32* %a, align 4
+  		%26 = load i32* %aEnd, align 4
+  		%27 = icmp sle i32 %25, %26
+  		
+  		# convert to expression
+  		a < aEnd
 
 <b><i>Test: Matrix multiply</b></i>
 
@@ -271,15 +300,16 @@ Array index analysis result:
 	A = a + wA * ty + tx
 	B = b + wB * ty + tx
 	C = wB * 32 * by + 32 * bx + wB * ty + tx
+Induction variables analysis result:	a = wA * 32 * blockIdx.y	a = a + 32	b = 32 * blockIdx.x	b = b + 32 * wBConstrains analysis result:		execution path of a,b:[2, 1, 0]	execution path of c:[8, 1, 0]	a,b constrains: a <= wA * 32 * blockIdx.y + wA - 1	c constrains: a > wA * 32 * blockIdx.y + wA - 1
 
-With knowledge of a and b are induction variables and following the following rules:
+With knowledge of above and following runtime information:
 
-	a = ( wA * 32 * by : 32 : wA * 32 * by + wA - 1 ) (additional induction variable analysis)
-	b = ( 32 * bx : 32 * wB : 32 * bx + wB - 1 ) (additional induction variable analysis) 
+	wA = constant
+	wB = constant
 	tx = ( 0 : 1 : 31) (runtime)
 	ty = ( 0 : 1 : 31) (runtime)
 	
-Exact access range by threads block can be calculated with its IDs (bx, by).
+Exact access range by threads block can be calculated with its IDs (blockIdx.x, blockIdx.y).
 
 <a href="https://github.com/dongchen-coder/dongchen-coder.github.io/blob/master/final_report.pdf">presentation (PPT)</a>
 

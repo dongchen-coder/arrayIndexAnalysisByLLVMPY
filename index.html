@@ -95,18 +95,12 @@ sup {
 	}
 }
 </style>
-<title><big>
-
-CSC 453: Code transformations for GPU race detection with llvm-py
-=======
-
-Dong Chen
-
-Introduction</title>
+<title>llvmpy</title>
 
 </head>
 <body>
-<p><big></p>
+<p><big>
+Post 1</p>
 
 <h1>CSC 453: Code transformations for GPU race detection with llvm-py</h1>
 
@@ -162,7 +156,7 @@ Introduction</title>
 </ol>
 
 
-<h2>Update Post 1</h2>
+<h2>Update Post 2</h2>
 
 <p>llvmpy can be easily used to generate LLVM IR code, so inserting LLVM IR code of the functions is a good choice. The first step is to generate the functions which will be called by kernels for race detection. Let's take <i>region_copy()</i> as an example, the original C code of <i>region_copy()</i> is listed below, it will copy the data from <i>orig_src</i> to <i>new_copy</i> in parallel:</p>
 
@@ -248,7 +242,7 @@ The generated code is listed <a href="https://github.com/dongchen-coder/dongchen
 
 <p>But for now, whether llvmpy supports analysis is still need to be explored. Pass manager part of llvmpy should be further checked.</p>
 
-<h2>Update Post 2</h2>
+<h2>Update Post 3</h2>
 
 <p>Answering previous questions:</p>
 
@@ -284,7 +278,9 @@ The generated code is listed <a href="https://github.com/dongchen-coder/dongchen
 </ol>
 
 
-<p>But all the analysis and code transformation are performed in LLVM IR level, which is not convenient for source to source code transformation which is easier to be performed in AST level. Python is a very good choice to implement the whole compiler, we can write a CUDA compiler to get the AST of CUDA program. (<a href="https://github.com/dongchen-coder/dongchen-coder.github.io/blob/master/kaleidoscope.py">kaleidoscope</a>) provides a good example and reference.</p>
+<p><b>Summary</b></p>
+
+<p>But all the analysis and code transformation are performed in LLVM IR level, which is not convenient for source to source code transformation which is easier to be performed in AST level. Python is a very good choice to implement the whole compiler, we can write a CUDA compiler to get the AST of CUDA program. (<a href="https://github.com/dongchen-coder/dongchen-coder.github.io/blob/master/kaleidoscope.py">kaleidoscope</a>) provides a good example and reference. We can implement the following part one by one and generate AST ourself.</p>
 
 <pre><code>    1.tokenizer
     2.lexer
@@ -292,35 +288,189 @@ The generated code is listed <a href="https://github.com/dongchen-coder/dongchen
     4.code generator
 </code></pre>
 
-<p>What job is LLVMPY suitable to do:</p>
+<h2>What job is LLVMPY suitable to do:</h2>
 
-<p>Array access analysis (<a href="https://github.com/dongchen-coder/dongchen-coder.github.io/blob/master/arrayAccessAnalysis.py">source code</a>) of GPU kernel program:</p>
+<p><b>Array Access Analysis of GPU kernel program:</b></p>
 
-<p>GPU kernel program will be mapped into thousands of threads. threads are grouped into thread blocks. The execution model requires that each thread blocks should be independent. That is to say there should be no data dependence. Without data dependence, thread blocks can be assigned to different GPUs and be executed by multiple GPUs at the same time. The speedup is almost linear. And with the knowledge of the exact array access range of each thread blocks, the assginment can be done automatically.</p>
+<p><b><i>Why to perform Array Access Analysis?</i></b></p>
 
-<p>Matrix multiply for example:</p>
+<p>During execution, GPU kernel program will be mapped into thousands of threads. threads are grouped into thread blocks. The execution model requires that each thread blocks should be independent. That is to say there should be no data dependence. Without data dependence, thread blocks can be assigned to different GPUs and be executed by multiple GPUs at the same time. The speedup is almost linear. And with the knowledge of the exact array access range of each thread blocks, the assginment can be done automatically without explicit memory copy (host_to_device and device_to_host).</p>
+
+<p><b><i>Why program by LLVMPY is easier than using the origianl APIs?</i></b></p>
+
+<p>Compare the coding segments with same functionality between LLVM API and LLVMPY. LLVMPY has three advantages expecially when the application has a lot of codes:</p>
+
+<ol>
+<li>Do not need to specify which iterator to use</li>
+<li>No template functions which have to specify the type</li>
+<li>No pointers</li>
+</ol>
+
+
+<p>This makes implementation in LLVMPY much easier than in C++ LLVM API</p>
+
+<pre><code>// Original C++ LLVM API
+for (Function::iterator b = F.begin(), be = F.end(); b != be; ++b) {
+        for (BasicBlock::iterator i = b-&gt;begin(), ie = b-&gt;end(); i != ie; ++i) {
+          if (CallInst* callInst = dyn_cast&lt;CallInst&gt;(&amp;*i)) {
+                       if (callInst-&gt;getCalledFunction() == targetFunc)
+              ++callCounter;
+          }
+        }
+      }
+</code></pre>
+
+<pre><code># llvmpy
+for bb in f.basic_blocks:
+    for istr in bb.instructions:
+        if istr.opcode == OPCODE_CALL:
+            if its.operands[0] == targetFunc:
+                callCounter=callCounter+1   
+</code></pre>
+
+<p><b><i>Implementation:</i></b></p>
+
+<p>The impementation of array access analysis contains three parts: array index analysis, induction variables analysis and constains analysis.</p>
+
+<p>array index analysis: (<a href="https://github.com/dongchen-coder/dongchen-coder.github.io/blob/master/arrayAccessAnalysis.py">source code</a>)</p>
+
+<ul>
+<li><p>locating array access instruction ‘getelementptr’</p>
+
+<pre><code>  %113 = getelementptr inbounds float* %112, i64 %111
+</code></pre></li>
+<li><p>construct prefix expression by define-use chains</p>
+
+<pre><code>  #define-use chains
+  %111 = sext i32 %110 to i64
+  %110 = add nsw i32 %108, %109
+  %108 = add nsw i32 %104, %107
+  %109 = load i32* %tx, align 4
+  %104 = load i32* %c, align 4
+  %107 = mul nsw i32 %105, %106
+  %105 = load i32* %5, align 4
+  %106 = load i32* %ty, align 4
+
+  #prefix expression
+  add add tx c mul %5 ty
+</code></pre></li>
+<li><p>construct infix expresion from prefix expression</p>
+
+<pre><code>  #prefix expression
+  add add tx c mul %5 ty
+  # step 1
+  add add tx c %5*ty
+  # step 2
+  add c+%5*ty tx
+  # step 3
+  c+%5*ty+tx
+</code></pre></li>
+</ul>
+
+
+<p>induction variables analysis: (<a href="https://github.com/dongchen-coder/dongchen-coder.github.io/blob/master/inductionVariableAnalysis.py">source code</a>)</p>
+
+<ul>
+<li><p>locating store to induction variable instructions</p>
+
+<pre><code>  #induction variable %a
+  store i32 %22, i32* %a, align 4
+</code></pre></li>
+<li><p>construct expression</p>
+
+<pre><code>  #define use chain
+  %22 = load i32* %aBegin, align 4
+  #expression
+  %a = %aBegin
+</code></pre></li>
+</ul>
+
+
+<p>constrains analysis: (<a href="https://github.com/dongchen-coder/dongchen-coder.github.io/blob/master/constrainAnalysis.py">source code</a>)</p>
+
+<ul>
+<li><p>locating the basic blocks contain array access</p>
+
+<pre><code>  basic block 8
+      %113 = getelementptr inbounds float* %112, i64 %111
+</code></pre></li>
+<li><p>construct Execution Path Tree from control flow graph</p>
+
+<pre><code>  #Control flow graph (basic block 0~8)
+
+     /--&lt;----&lt;-----&lt;---\
+     |     /-&lt;-&lt;-\     |
+     |     |     |     |
+  0-&gt;1-&gt;2-&gt;3-&gt;4-&gt;5-&gt;6-&gt;7-&gt;8
+     |     |        |     |  
+     |     \-&gt;----&gt;-/     |
+     \--&gt;----&gt;-----&gt;----&gt;-/
+
+  #Execution path tree
+  Start From Basic Block 0 : [[0]]
+  Start From Basic Block 1 : [[1, 0], [1, 7, 6, 3, 2, 1], [1, 7, 6, 3, 5, 4, 3]]
+  Start From Basic Block 2 : [[2, 1, 0], [2, 1, 7, 6, 3, 2], [2, 1, 7, 6, 3, 2, 5, 4, 3]]
+  Start From Basic Block 3 : [[3, 5, 4, 3], [3, 2, 1, 0], [3, 2, 1, 7, 6, 3]]
+  Start From Basic Block 4 : [[4, 3, 5, 4], [4, 3, 2, 1, 0], [4, 3, 2, 1, 7, 6, 3]]
+  Start From Basic Block 5 : [[5, 4, 3, 5], [5, 4, 3, 2, 1, 0], [5, 4, 3, 2, 1, 7, 6, 3]]
+  Start From Basic Block 6 : [[6, 3, 5, 4, 3], [6, 3, 2, 1, 0], [6, 3, 2, 1, 7, 6]]
+  Start From Basic Block 7 : [[7, 6, 3, 2, 1, 7], [7, 6, 3, 5, 4, 3], [7, 6, 3, 2, 1, 0]]
+  Start From Basic Block 8 : [[8, 1, 0], [8, 1, 7, 6, 3, 2, 1], [8, 1, 7, 6, 3, 5, 4, 3]]
+</code></pre></li>
+<li><p>extract branch conditions to constrains</p>
+
+<pre><code>  #branch in Execution path [8,1,0]
+  br i1 %27, label %28, label %95
+
+  #branch condition %27
+  %25 = load i32* %a, align 4
+  %26 = load i32* %aEnd, align 4
+  %27 = icmp sle i32 %25, %26
+
+  # convert to expression
+  a &lt; aEnd
+</code></pre></li>
+</ul>
+
+
+<p><b><i>Test: Matrix multiply</b></i></p>
 
 <p>GPU kernel program of matrix multiply (<a href="https://github.com/dongchen-coder/dongchen-coder.github.io/blob/master/matrixMul.c">C</a>, <a href="https://github.com/dongchen-coder/dongchen-coder.github.io/blob/master/matrixMul.ll">LLVM IR</a>)</p>
 
-<p>Array aacess analysis result:</p>
+<p>Array index analysis result:</p>
 
 <pre><code>A = a + wA * ty + tx
 B = b + wB * ty + tx
 C = wB * 32 * by + 32 * bx + wB * ty + tx
 </code></pre>
 
-<p>With knowledge of a and b are induction variables and following the following rules:</p>
+<p>Induction variables analysis result:</p>
 
-<pre><code>a = ( wA * 32 * by : 32 : wA * 32 * by + wA - 1 ) (additional induction variable analysis)
-b = ( 32 * bx : 32 * wB : 32 * bx + wB - 1 ) (additional induction variable analysis) 
+<pre><code>a = wA * 32 * blockIdx.y
+a = a + 32
+b = 32 * blockIdx.x
+b = b + 32 * wB
+</code></pre>
+
+<p>Constrains analysis result:</p>
+
+<pre><code>execution path of a,b:[2, 1, 0]
+execution path of c:[8, 1, 0]
+a,b constrains: a &lt;= wA * 32 * blockIdx.y + wA - 1
+c constrains: a &gt; wA * 32 * blockIdx.y + wA - 1
+</code></pre>
+
+<p>With knowledge of above and following runtime information:</p>
+
+<pre><code>wA = constant
+wB = constant
 tx = ( 0 : 1 : 31) (runtime)
 ty = ( 0 : 1 : 31) (runtime)
 </code></pre>
 
-<p>Exact access range by threads block can be calculated with its IDs (bx, by).</p>
+<p>Exact access range by threads block can be calculated with its IDs (blockIdx.x, blockIdx.y).</p>
 
 <p><a href="https://github.com/dongchen-coder/dongchen-coder.github.io/blob/master/final_report.pdf">presentation (PPT)</a></p>
-
 
 <p></big></p>
 </body>
